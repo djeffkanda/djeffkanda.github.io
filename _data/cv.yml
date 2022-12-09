@@ -2,31 +2,32 @@
   type: map
   contents:
     - name: Full Name
-      value: Albert Einstein
-    - name: Date of Birth
-      value: 14th March 1879
+      value: D'Jeff Kanda Nkashama
+#    - name: Date of Birth
+#      value: 14th March 1879
     - name: Languages
-      value: English, German
+      value: English, French, Lingala
 
 - title: Education
   type: time_table
   contents:
     - title: PhD
-      institution: University of Zurich, Zurich, Switzerland
-      year: 1905
+      institution: University of Sherbrooke, QC, Canada
+      year: 2021 - present
       description:
-        - Description 1.
-        - Description 2.
-        - title: Description 3.
+#        - Description 1.
+#        - Description 2.
+        - title: Robust deep learning models for anomaly detection.
           contents:
             - Sub-description 1.
             - Sub-description 2.
-    - title: Federal teaching diploma
-      institution: Eidgenössische Technische Hochschule, Zurich, Switzerland
-      year: 1900
+    - title: Master's degree
+      institution: AIMS/University of the Western Cape, South Africa.
+      year: 2018 - 19
       description:
         - Description 1.
         - Description 2.
+        - title: Search and learn strategies for game play.
 
 - title: Experience
   type: time_table

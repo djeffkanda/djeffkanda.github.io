@@ -1,6 +1,9 @@
-"AJP":
+"ICML":
   url: https://aapt.scitation.org/journal/ajp
   color: "#00369f"
 
-"PhysRev":
+"ICLR":
+  url: https://journals.aps.org/
+
+"IEEE/TNNS":
   url: https://journals.aps.org/

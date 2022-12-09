@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>IFT 615 — Intelligence artificielle | Connaître les principes et les techniques algorithmiques de base de l’intelligence artificielle. Savoir choisir et appliquer les différentes approches en fonction du problème à résoudre. Être sensibilisé à l’éthique de l’intelligence artificielle.</title>
+<meta name="generator" content="Jekyll v4.2.1" />
+<meta property="og:title" content="IFT 615 — Intelligence artificielle" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Connaître les principes et les techniques algorithmiques de base de l’intelligence artificielle. Savoir choisir et appliquer les différentes approches en fonction du problème à résoudre. Être sensibilisé à l’éthique de l’intelligence artificielle." />
+<meta property="og:description" content="Connaître les principes et les techniques algorithmiques de base de l’intelligence artificielle. Savoir choisir et appliquer les différentes approches en fonction du problème à résoudre. Être sensibilisé à l’éthique de l’intelligence artificielle." />
+<link rel="canonical" href="http://localhost:4000/" />
+<meta property="og:url" content="http://localhost:4000/" />
+<meta property="og:site_name" content="IFT 615 — Intelligence artificielle" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="IFT 615 — Intelligence artificielle" />
+
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="IFT 615 — Intelligence artificielle" /><script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="../tp3">IFT 615 — Intelligence artificielle</a>
+
+  </div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div class="home"><p><img src="assets/logoudes.svg" alt="logo UdeS" class="logo" /></p>
+
+<h3 class="center-text"> IFT 615 — Intelligence artificielle  </h3>
+<h3 class="center-text"> Été 2022  </h3>
+<h3 class="center-text"> TP3  </h3>
+
+<hr />
+
+<h3><strong>Date limite: 3 juillet à 23h59</strong></h3>
+<h3><a href="../../assets/tp/IFT615_TP3.zip">Fichiers sources</a></h3>
+<h3 id="mode-de-soumission-turnin-tp3">Mode de soumission: Turnin TP3</h3>
+<h3 id="total-de-points-30-pondération-de-8">Total de points 30. Pondération de 8%.</h3>
+<h3 id="nb-tout-retard-vaudra-0"><strong>NB: Tout retard vaudra 0.</strong></h3>
+
+<p><strong>Enseignant :</strong> Froduald Kabanza, Courriel: <a href="mailto:froduald.kabanza@usherbrooke.ca">froduald.kabanza@usherbrooke.ca</a></p>
+
+<p><strong>Auxiliaire</strong> : Jean-Charles Verdier, Courriel: <a href="mailto:jean-charles.verdier@usherbrooke.ca">jean-charles.verdier@usherbrooke.ca</a></p>
+
+<p>Source: The <a href="http://inst.eecs.berkeley.edu/~cs188/pacman/project_overview">Pac-Man Projects</a>, University of California, Berkeley</p>
+
+<p><strong>Évaluation</strong></p>
+
+<p>Votre implementation sera évaluée par un correcteur automatique <code class="language-plaintext highlighter-rouge">autograder.py</code>. Veuillez ne pas changer les noms des fonctions ou des 
+classes fournies dans le code, sinon vous allez perturber le correcteur automatique.</p>
+<blockquote>
+  <p>Veuillez noter que votre note finale peut être différente de la note que vous obtenez avec le correcteur automatique.</p>
+</blockquote>
+
+<p><strong>Soumission</strong></p>
+
+<p>Vous devez soumettre les fichiers <code class="language-plaintext highlighter-rouge">bustersAgents.py</code>, <code class="language-plaintext highlighter-rouge">NaiveBayesClassifier</code>, et <code class="language-plaintext highlighter-rouge">inference.py</code>, ainsi qu’un document <code class="language-plaintext highlighter-rouge">solution.pdf</code>.</p>
+
+<p><strong>Plagiat</strong></p>
+
+<p>Nous prendrons soin de vérifier votre code par rapport aux autres soumissions de la classe afin de détecter toute redondance logique.</p>
+
+<p><em>Tout cas de plagiat sera sanctionné adéquatement. Voir le <a href="(https:/www.usherbrooke.ca/ssf/fileadmin/sites/ssf/documents/Antiplagiat/Document-informatif-V2-CU-2012-06-06.pdf)">document informatif</a> du Groupe de travail antiplagiat de l’Université de Sherbrooke à cet effet.</em></p>
+
+<hr />
+
+<h2 id="introduction">Introduction</h2>
+
+<p><img src="assets/images/busters.png" alt="logo UdeS" class="center-img" />
+Dans ce projet, vous allez concevoir des agents Pacman qui utilisent des capteurs pour localiser et manger des fantômes 
+invisibles. Vous passerez de la localisation de fantômes uniques et stationnaires à la chasse de meutes de fantômes 
+multiples en mouvement.</p>
+
+<p>Le code de ce projet contient plusieurs fichiers, mais vous êtes appelés à ne modifier que les fichiers 
+<code class="language-plaintext highlighter-rouge">bustersAgents.py</code>, <code class="language-plaintext highlighter-rouge">inference.py</code> et <code class="language-plaintext highlighter-rouge">NaiveBayesClassifier</code> aux endroits bien indiqués.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="k">def</span> <span class="nf">observeUpdate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observation</span><span class="p">,</span> <span class="n">gameState</span><span class="p">):</span>
+        <span class="s">"""
+        Update beliefs based on the distance observation and Pacman's position.
+        """</span>
+        <span class="s">"*** YOUR CODE HERE ***"</span>
+</code></pre></div></div>
+<p>Toutefois, vous pouvez consulter le contenu des autres fichiers sans les modifiers.</p>
+
+<p>Dans ce jeu, Pacman est équipé des capteurs qui fournissent des lectures bruitées de la 
+distance de Manhattan à chaque fantôme. Le jeu se termine lorsque Pacman a mangé tous les fantômes.
+Pour commencer, essayez de jouer vous-même au jeu en utilisant le clavier.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">python</span> <span class="n">busters</span><span class="p">.</span><span class="n">py</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="questions">Questions</h1>
+
+<p>Tout au long de ce projet, nous utiliserons la classe <code class="language-plaintext highlighter-rouge">DiscreteDistribution</code> définie dans <code class="language-plaintext highlighter-rouge">inference.py</code> pour modéliser 
+les distributions de croyances et de poids. Cette classe est une extension de la classe dictionnaire Python, 
+où les clés sont les différents éléments discrets de notre distribution, et les valeurs correspondantes sont 
+proportionnelles à la croyance ou au poids que la distribution attribue à cet élément. Il vous est demandé 
+de compléter les parties manquantes de cette classe, ce qui sera crucial pour toutes les autres questions.</p>
+
+<hr />
+
+<p><br /><br /></p>
+
+<hr />
+<hr />
+
+<h2 id="prerequis">Prérequis</h2>
+<hr/>
+<hr/>
+<h2 id="question-0--1-point">Question 0: 1 point</h2>
+<p>Tout d’abord, implementez la méthode <code class="language-plaintext highlighter-rouge">normalize</code>, qui normalise les valeurs de la distribution pour que leur somme 
+  soit égale à un.</p>
+  
+  <blockquote>
+    <p>Note</p>
+  
+    <p>Pour une distribution vide ou une distribution dont toutes les valeurs sont égales à zéro, ne 
+  faites rien. Notez que cette méthode modifie directement la distribution, au lieu de renvoyer une nouvelle distribution.</p>
+  </blockquote>
+  <hr />
+  <hr />
+<h2 id="inférence-exacte">Inférence exacte</h2>
+
+<hr />
+<hr />
+
+<h2 id="question-1--2-points">Question 1 : 2 points</h2>
+
+<p>Dans cette question, vous allez implémenter la fonction
+<code class="language-plaintext highlighter-rouge">getObservationProb(noisyDistance, pacmanPosition, ghostPosition, jailPosition)</code> 
+de la classe de base <code class="language-plaintext highlighter-rouge">InferenceModule</code> dans 
+<code class="language-plaintext highlighter-rouge">inference.py</code>. 
+Cette fonction renvoie la probabilité \(P(noisyDistance\ |\ pacmanPosition,\ ghostPosition)\) de la 
+lecture bruitée de la distance étant donné la position de Pacman et la position du fantôme.
+ Vous n'avez pas à calculer directement cette probabilité. Vous pouvez appeler la fonction <code class="language-plaintext highlighter-rouge">busters.getObservationProbability(noisyDistance, trueDistance)</code>
+  qui renvoie une distribution de probabilité sur les lectures de distance étant donné la vraie distance 
+entre Pacman et le fantôme, \(P(noisyDistance\ |\ trueDistance)\). La fonction <code class="language-plaintext highlighter-rouge">manhattanDistance</code> est déjà implémentée et permet le calcul de la distance de Manhattan entre Pacman et celui du fantôme.</p>
+
+<blockquote>
+  <p>Lorsqu’un fantôme est capturé, il est envoyé à l’emplacement de la prison, et le capteur de distance renvoie de manière 
+  déterministe <code class="language-plaintext highlighter-rouge">None</code>.</p>
+</blockquote>
+
+<p>Une bonne implémentation devrait gérer les cas particulier suivants:</p>
+<ul>
+  <li>Si le fantôme est en prison et si <code class="language-plaintext highlighter-rouge">noisyDistance</code> est indéfinie simultanément, alors la probabilité est 1.</li>
+  <li>Au contraire, la probabilité que <code class="language-plaintext highlighter-rouge">noisyDistance</code> soit indéfinie lorsque fantôme n'est pas en prison en même temps est nulle.
+  De la même manière, si le fantôme est en prison alors <code class="language-plaintext highlighter-rouge">noisyDistance</code> est nécessairement nul aussi. Au sinon, on retourne 0.
+  </li>
+</ul>
+
+<p>Vous pouvez tester votre code avec le correcteur automatique en utilisant la commande suivante:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python autograder.py <span class="nt">-q</span> q1
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="question-2--4-points">Question 2 : 3 points</h2>
+
+<p>Dans cette question, vous devez implémenter la méthode <code class="language-plaintext highlighter-rouge">observeUpdate(observation, gameState)</code> de la classe <code class="language-plaintext highlighter-rouge">ExactInference</code> de <code class="language-plaintext highlighter-rouge">inference.py</code> pour mettre 
+à jour correctement la distribution des croyances de l’agent sur les positions des fantômes en fonction d’une observation 
+des capteurs de Pacman. Les croyances représentent la probabilité que le fantôme se trouve à un endroit particulier, et 
+sont stockées sous la forme d’un objet <code class="language-plaintext highlighter-rouge">DiscreteDistribution</code> dans un champ appelé <code class="language-plaintext highlighter-rouge">self.beliefs</code>, que vous devez mettre à jour.
+Vous devez itérer vos mises à jour sur la variable <code class="language-plaintext highlighter-rouge">self.allPositions</code> qui inclut toutes les 
+positions légales du fantôme, plus la position spéciale de la prison.</p>
+
+<p>Pour votre implémentation, pensez à utiliser la fonction <code class="language-plaintext highlighter-rouge">self.getObservationProb</code> de la question 1, et les fonctions
+ <code class="language-plaintext highlighter-rouge">gameState.getPacmanPosition()</code> et <code class="language-plaintext highlighter-rouge">self.getJailPosition()</code> pour obtenir respectivement la position de Pacman et la position de 
+ la prison .</p>
+
+<p>Dans l’affichage de Pacman, les croyances postérieures élevées sont représentées par des couleurs vives, tandis que 
+les croyances faibles sont représentées par des couleurs faibles. Vous devriez commencer avec un grand nuage de 
+croyances qui se réduit au fur et à mesure que les preuves s’accumulent. En observant les cas de test, assurez-vous 
+de comprendre comment les carrés convergent vers leur coloration finale.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python autograder.py <span class="nt">-q</span> q2
+</code></pre></div></div>
+
+<p>Si vous souhaitez exécuter ce test (ou tout autre test) sans graphiques, vous pouvez ajouter l’option suivante :</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python autograder.py <span class="nt">-q</span> q2 <span class="nt">--no-graphic</span>
+</code></pre></div></div>
+
+<hr />
+
+<hr />
+
+<h2 id="question-3--5-points">Question 3 : 4 points</h2>
+
+<p>Supposons que Pacman ait également des connaissances sur la façon dont un fantôme peut se déplacer. Par exemple, un fantôme ne peut 
+  pas traverser un mur et est limité dans ses déplacements en fonction du temps. Ces informations permettraient au Pacman une mise à jour
+ plus fine de son système de croyance.</p>
+<p>Dans la question précédente, vous avez implémenté la mise à jour des croyances de Pacman en fonction de ses observations.
+  Dans cette question, on augmente ce système de croyances avec des informations complémentaires. 
+  Vous devez implémenter la fonction <code class="language-plaintext highlighter-rouge">elapseTime</code> dans <code class="language-plaintext highlighter-rouge">ExactInference</code>. L’étape <code class="language-plaintext highlighter-rouge">elapseTime</code> devrait, pour 
+ce problème, mettre à jour la croyance à chaque position sur la carte après l’écoulement d’un pas de temps. Votre agent 
+a accès à la distribution des actions pour le fantôme par le biais de <code class="language-plaintext highlighter-rouge">self.getPositionDistribution</code>. Afin d’obtenir 
+la distribution sur les nouvelles positions du fantôme, étant donné sa position précédente, utilisez cette ligne de code :</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">newPosDist</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">getPositionDistribution</span><span class="p">(</span><span class="n">gameState</span><span class="p">,</span> <span class="n">oldPos</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>où <code class="language-plaintext highlighter-rouge">oldPos</code> se réfère à la position précédente du fantôme. 
+  Utilisez encore <code class="language-plaintext highlighter-rouge">self.allPositions</code> pour obtenir la liste des positions précédentes.
+  <code class="language-plaintext highlighter-rouge">newPosDist</code> est un objet <code class="language-plaintext highlighter-rouge">DiscreteDistribution</code> qui donne une liste
+  de positions et leur probabilité au temps t+1 en fonction de la position <code class="language-plaintext highlighter-rouge">oldPos</code> au temps t.
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python autograder.py <span class="nt">-q</span> q3
+</code></pre></div></div>
+<hr />
+
+<h2 id="question-4--2-points">Question 4 : 2 points</h2>
+
+<p>Cette question utilisera vos implémentations 
+<code class="language-plaintext highlighter-rouge">observeUpdate</code> et <code class="language-plaintext highlighter-rouge">elapseTime</code> 
+ensemble, ainsi qu’une stratégie de chasse simple que vous implémenterez.
+Dans cette stratégie, Pacman suppose que chaque fantôme se trouve dans la position la plus 
+probable selon ses croyances, puis se dirige vers le fantôme le plus proche.
+Attention, vous ne devez pas appeler directement les fonctions 
+<code class="language-plaintext highlighter-rouge">observeUpdate</code> et <code class="language-plaintext highlighter-rouge">elapseTime</code>.
+Le backend se charge de les appeler à votre place.</p>
+
+<p>Implémentez la méthode <code class="language-plaintext highlighter-rouge">chooseAction</code> de <code class="language-plaintext highlighter-rouge">GreedyBustersAgent</code> dans <code class="language-plaintext highlighter-rouge">bustersAgents.py</code> (ligne 134). Votre agent doit d’abord trouver 
+la position la plus probable de chaque fantôme non capturé restant, puis choisir une action 
+qui minimise la distance entre Pacman et le fantôme le plus proche.</p>
+
+<p>Pour trouver la distance du labyrinthe entre deux positions quelconques <code class="language-plaintext highlighter-rouge">(pos1 et pos2)</code>, utilisez 
+<code class="language-plaintext highlighter-rouge">self.distancer.getDistance(pos1, pos2)</code>. Pour trouver la position du successeur d’une position après une action :</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">successorPosition</span> <span class="o">=</span> <span class="n">Actions</span><span class="p">.</span><span class="n">getSuccessor</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">action</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>On vous fournit les <code class="language-plaintext highlighter-rouge">livingGhostPositionDistributions</code>, une liste d’objets <code class="language-plaintext highlighter-rouge">DiscreteDistribution</code> représentant les distributions 
+de croyance de position pour chacun des fantômes qui ne sont pas encore capturés.</p>
+
+<p>Pour tester votre code :</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python autograder.py <span class="nt">-q</span> q4
+</code></pre></div></div>
+<hr />
+
+<p><br /><br /></p>
+
+<hr />
+<hr />
+<h2 id="inférence-approximative">Inférence approximative</h2>
+
+<hr />
+<hr />
+
+<h2 id="question-5--2-points">Question 5 : 2 points</h2>
+
+<p>Pour les prochaines questions, 
+vous allez implémenter un algorithme de <em>filtrage de particules</em> pour suivre un seul fantôme.</p>
+
+<p>Tout d’abord, implémentez les fonctions <code class="language-plaintext highlighter-rouge">initializeUniformly</code> et <code class="language-plaintext highlighter-rouge">getBeliefDistribution</code> dans la classe <code class="language-plaintext highlighter-rouge">ParticleFilter</code> du 
+fichier <code class="language-plaintext highlighter-rouge">inference.py</code>. Une particule est une position de fantôme dans ce problème d’inférence. 
+Notez que, pour l’initialisation, les particules doivent être distribuées de manière égale (et non aléatoire) sur 
+les positions légales afin d’assurer une priorité uniforme. <b>Astuce</b>: l’opérateur <em>mod</em> devrait être utilisé pour
+ <code class="language-plaintext highlighter-rouge">initializeUniformly</code> afin de permettre une sélection uniforme des positions légales.</p>
+
+<p>Notez que la variable dans laquelle vous stockez vos particules doit être une <strong><em>liste</em></strong>. La méthode <code class="language-plaintext highlighter-rouge">getBeliefDistribution</code> 
+prendra ensuite la liste de particules et pour la convertir en un objet <code class="language-plaintext highlighter-rouge">DiscreteDistribution</code>.
+N'oubliez pas de normaliser votre distribution après l'avoir initialisée. De plus, <code class="language-plaintext highlighter-rouge">self.particules</code>
+hérite de la méthode <code class="language-plaintext highlighter-rouge">count(key)</code> permettant de compter le nombre de répétitions de l'élément
+<code class="language-plaintext highlighter-rouge">key</code>.
+</p>
+
+<p>Testez votre code:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python autograder.py <span class="nt">-q</span> q5
+</code></pre></div></div>
+<hr />
+
+<hr />
+
+<h2 id="question-6--3-points">Question 6 : 3 points</h2>
+
+<p>Ensuite, nous allons implémenter la méthode <code class="language-plaintext highlighter-rouge">observeUpdate</code> 
+  dans la classe <code class="language-plaintext highlighter-rouge">ParticleFilter</code> dans <code class="language-plaintext highlighter-rouge">inference.py</code>. 
+  Cette méthode construit une distribution de poids sur <code class="language-plaintext highlighter-rouge">self.particles</code> où 
+  le poids d’une particule est la probabilité de l’observation étant donné la position de Pacman et l’emplacement de cette particule.
+   Ensuite, nous rééchantillonnons à partir de cette distribution pondérée pour construire notre nouvelle liste de particules.
+  </p>
+
+<p>Vous devez à nouveau utiliser la fonction <code class="language-plaintext highlighter-rouge">self.getObservationProb</code> pour
+   trouver la probabilité d’une observation compte tenu de la position de Pacman, de la position d’un fantôme potentiel et de la position de la prison. 
+La méthode <code class="language-plaintext highlighter-rouge">sample</code> de la classe 
+<code class="language-plaintext highlighter-rouge">DiscreteDistribution</code> vous sera également utile.
+ Pour rappel, vous pouvez obtenir la position de Pacman en utilisant <code class="language-plaintext highlighter-rouge">gameState.getPacmanPosition()</code>, et la position de la prison en utilisant <code class="language-plaintext highlighter-rouge">self.getJailPosition()</code>.</p>
+
+<p>Il y a un cas spécial qu’une implémentation adéquate doit gérer. Lorsque toutes les particules reçoivent un poids nul, 
+la liste des particules doit être réinitialisée en appelant <code class="language-plaintext highlighter-rouge">initializeUniformly</code>.
+À cet effet, la méthode <code class="language-plaintext highlighter-rouge">total</code> de la <code class="language-plaintext highlighter-rouge">DiscreteDistribution</code> 
+peut être utile.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python autograder.py <span class="nt">-q</span> q6
+</code></pre></div></div>
+
+<hr />
+
+<hr />
+
+<h2 id="question-7--3-points">Question 7 : 3 points</h2>
+
+<p>Implémentez la fonction <code class="language-plaintext highlighter-rouge">elapseTime</code>
+   dans la classe <code class="language-plaintext highlighter-rouge">ParticleFilter</code> 
+   du fichier <code class="language-plaintext highlighter-rouge">inference.py</code>. Cette fonction doit construire une 
+nouvelle liste de particules qui correspond à chaque particule existante dans <code class="language-plaintext highlighter-rouge">self.particles</code> en avançant d’un pas de temps, 
+puis réaffecter cette nouvelle liste à <code class="language-plaintext highlighter-rouge">self.particles</code>. Une fois terminé, vous devriez être en mesure de suivre les fantômes 
+presque aussi efficacement qu’avec l’inférence exacte.</p>
+
+<p>Notez que dans cette question, nous testerons à la fois la fonction <code class="language-plaintext highlighter-rouge">elapseTime</code> en isolation, ainsi que l’implémentation 
+complète du filtre à particules combinant <code class="language-plaintext highlighter-rouge">elapseTime</code> et <code class="language-plaintext highlighter-rouge">observe</code>.</p>
+
+<p>Comme dans la méthode <code class="language-plaintext highlighter-rouge">elapseTime</code> de la classe <code class="language-plaintext highlighter-rouge">ExactInference</code>, vous devez utiliser :</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">newPosDist</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">getPositionDistribution</span><span class="p">(</span><span class="n">gameState</span><span class="p">,</span> <span class="n">oldPos</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Cette ligne de code permet d’obtenir la distribution sur les nouvelles positions du fantôme, compte tenu de sa position précédente (<code class="language-plaintext highlighter-rouge">oldPos</code>). La méthode d’exemple de la classe <code class="language-plaintext highlighter-rouge">DiscreteDistribution</code> sera également utile.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python autograder.py <span class="nt">-q</span> q7
+</code></pre></div></div>
+
+<p><br /><br /></p>
+
+<hr />
+<hr />
+
+<h2 id="filtre-de-particules-joints">Filtre de particules joints</h2>
+
+<hr />
+<hr />
+
+<h2 id="question-8--1-points">Question 8 : 1 point</h2>
+
+<p>Jusqu’à présent, nous avons suivi chaque fantôme indépendamment, ce qui fonctionne bien pour le <code class="language-plaintext highlighter-rouge">RandomGhost</code> par défaut ou 
+le <code class="language-plaintext highlighter-rouge">DirectionalGhost</code> . Cependant, <code class="language-plaintext highlighter-rouge">DispersingGhost</code> choisit des actions qui évitent les autres fantômes. 
+Puisque les modèles de transition des fantômes ne sont plus indépendants, tous les fantômes doivent être suivis conjointement dans un réseau de Bayes dynamique !</p>
+
+<p>Le réseau de Bayes a la structure suivante, où les variables cachées \(G\) représentent les positions des fantômes et les variables 
+d’émission \(E\) sont les distances bruitées à chaque fantôme. Cette structure peut être étendue à d’autres fantômes, mais seuls 
+deux (\(a\) et \(b\)) sont présentés ci-dessous.</p>
+
+<p><img src="assets/images/dbn.png" alt="logo UdeS" class="center-img" /></p>
+
+<p>Vous allez maintenant implémenter un filtre de particules qui suit plusieurs fantômes simultanément. 
+Chaque particule représentera un tuple de positions de fantômes qui est un échantillon de l’endroit où se trouvent tous les fantômes à l’heure actuelle. Le code est déjà configuré pour extraire les distributions marginales de chaque fantôme à partir de l’algorithme d’inférence conjointe que vous allez créer, afin de pouvoir afficher des nuages de croyances sur les fantômes individuels.</p>
+
+<p>Complétez la méthode <code class="language-plaintext highlighter-rouge">initializeUniformly</code> dans <code class="language-plaintext highlighter-rouge">JointParticleFilter</code>
+   du fichier <code class="language-plaintext highlighter-rouge">inference.py</code>. Le package de la librairie standard
+Python <code class="language-plaintext highlighter-rouge">itertools</code> peut vous êtres utile. Plus précisément, consultez 
+<code class="language-plaintext highlighter-rouge">itertools.product</code> pour obtenir une implémentation du produit cartésien.
+ Cependant, notez que les permutations ne sont pas retournées dans un ordre aléatoire. 
+ Par conséquent, vous devez ensuite mélanger la liste des permutations afin d’assurer un placement uniforme des particules 
+ sur la carte de jeu. Après le mélange, vous pouvez utiliser l’opérateur mod pour indexer la liste des permutations et
+ ajouter des particules à <code class="language-plaintext highlighter-rouge">self.particles</code>.</p>
+
+<p>Pour clarifier, nous n’avons pas eu besoin de mélanger dans <code class="language-plaintext highlighter-rouge">initializeUniformly</code> de q5 parce que q8, contrairement à q5, 
+a quelques tests où <code class="language-plaintext highlighter-rouge">self.numParticles</code> est inférieur au nombre total de permutations, donc nous devons mélanger la liste 
+pour s’assurer que les premiers éléments <code class="language-plaintext highlighter-rouge">self.numParticles</code> dans votre liste de permutations sont répartis uniformément 
+sur l’ensemble du tableau.</p>
+
+<p>Comme précédemment, utilisez <code class="language-plaintext highlighter-rouge">self.legalPositions</code> pour obtenir une liste des positions qu’un fantôme peut occuper et la variable dans laquelle vous stockez vos particules doit être une liste.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python autograder.py <span class="nt">-q</span> q8
+</code></pre></div></div>
+<hr />
+
+<hr />
+
+<h2 id="question-9--3-points">Question 9 : 3 points</h2>
+
+<p>Dans cette question, vous allez compléter la méthode <code class="language-plaintext highlighter-rouge">observeUpdate</code> dans la classe <code class="language-plaintext highlighter-rouge">JointParticleFilter</code> de <code class="language-plaintext highlighter-rouge">inference.py</code>. 
+  Votre implémentation devrait être similaire à celle de <code class="language-plaintext highlighter-rouge">ParticleFilter</code>, mais appliquée à plusieurs fantômes.
+  Une implémentation correcte pondérera et rééchantillonnera la liste entière des particules en fonction de l’observation de toutes les distances vers les fantômes.</p>
+
+<p>Pour boucler sur tous les fantômes, utilisez :</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">numGhosts</span><span class="p">):</span>
+    <span class="p">...</span>
+</code></pre></div></div>
+
+<p>Vous pouvez toujours obtenir la position de Pacman en utilisant <code class="language-plaintext highlighter-rouge">gameState.getPacmanPosition()</code>, mais pour obtenir la position 
+de la prison d’un fantôme, utilisez <code class="language-plaintext highlighter-rouge">self.getJailPosition(i)</code>, puisqu’il y a maintenant plusieurs fantômes ayant chacun leur propre 
+position de prison.</p>
+
+<p>Votre implémentation doit également gérer le cas particulier où toutes les particules reçoivent un poids nul. Dans ce cas, 
+<code class="language-plaintext highlighter-rouge">self.particles</code> doit être recréé à partir de la distribution antérieure en appelant <code class="language-plaintext highlighter-rouge">initializeUniformly</code>.</p>
+
+<p>Comme dans la méthode de mise à jour de la classe <code class="language-plaintext highlighter-rouge">ParticleFilter</code>, vous devez à nouveau utiliser la fonction <code class="language-plaintext highlighter-rouge">self.getObservationProb</code> 
+pour trouver la probabilité d’une observation étant donné la position de Pacman, une position potentielle de fantôme et la 
+position de la prison. La méthode sample de la classe <code class="language-plaintext highlighter-rouge">DiscreteDistribution</code>
+ vous sera de nouveau utile.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python autograder.py <span class="nt">-q</span> q9
+</code></pre></div></div>
+<hr />
+
+<hr />
+
+<h2 id="question-10--2-points">Question 10 : 2 points</h2>
+
+<p>Complétez la méthode <code class="language-plaintext highlighter-rouge">elapseTime</code> dans <code class="language-plaintext highlighter-rouge">JointParticleFilter</code> dans <code class="language-plaintext highlighter-rouge">inference.py</code> pour rééchantillonner correctement chaque particule pour 
+le réseau Bayesien. En particulier, chaque fantôme doit trouver une nouvelle position conditionnée par les positions de tous les fantômes 
+au pas de temps précédent.</p>
+
+<p>Comme dans la dernière question, vous pouvez boucler sur les fantômes en utilisant :</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">numGhosts</span><span class="p">):</span>
+    <span class="p">...</span>
+</code></pre></div></div>
+
+<p>Ensuite, en supposant que <code class="language-plaintext highlighter-rouge">i</code> se réfère à l’indice du fantôme, pour obtenir les distributions sur les nouvelles positions pour 
+ce seul fantôme, étant donné la liste (<code class="language-plaintext highlighter-rouge">prevGhostPositions</code>) des positions précédentes de tous les fantômes, utilisez :</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">newPosDist</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">getPositionDistribution</span><span class="p">(</span><span class="n">gameState</span><span class="p">,</span> <span class="n">prevGhostPositions</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">ghostAgents</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</code></pre></div></div>
+
+<p>Testez avec cette commande:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python autograder.py <span class="nt">-q</span> q10
+</code></pre></div></div>
+<hr />
+
+<hr />
+<hr />
+
+<h2 id="classifieur-bayésien-naïf">Classifieur bayésien naïf</h2>
+
+<hr />
+<hr />
+
+<h2 id="question-11--3-points">Question 11 : 4 points</h2>
+
+<p>Dans cette question vous devez implémenter un classifieur bayésien naïf multinomial pour identifier la langue d’un texte quelconque.
+
+  Étant donné une matrice \(T\) avec \(n\) lignes et \(d\) colonnes où \(n\) et \(d\) représentent respectivement le nombre de documents du corpus et 
+  le nombre de mots (tokens) distincts, votre classifieur doit identifier la langue \(lang \in \{\mathrm{anglais}, \mathrm{espagnol}, \mathrm{français}, \mathrm{portugais}\}\)
+   d'un document \(t_i \in T\), \(i = 1 \ldots n\). Chaque \(t_i\) est un vecteur
+   \( (\mathrm{freq}(w_{i1}), \mathrm{freq}(w_{i2}), …, \mathrm{freq}(w_{id}) ) \) où 
+   \(w_{ij}\) et \(\mathrm{freq}(w_{ij})\)</code>
+   dénotent respectivement le mot \(j, j = 1 \ldots d\) et sa fréquence dans le document \(t_i\).
+    Voici un exemple de la représentation des données:</p>
+</p>
+
+<p>Exemple :</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td>bonjour</td>
+      <td>hi</td>
+      <td>hello</td>
+      <td>comment</td>
+      <td>man</td>
+      <td>classe</td>
+      <td>surprise</td>
+      <td>langue</td>
+    </tr>
+    <tr>
+      <td>T1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>french</td>
+    </tr>
+    <tr>
+      <td>T2</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>english</td>
+    </tr>
+    <tr>
+      <td>T3</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>4</td>
+      <td>french</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Dans cet exemple, le document T3 contient une fois le mot "bonjour", et quatre fois le terme "surprise".</p>
+<p>Vous implémentez d'abord la fonction <code class="language-plaintext highlighter-rouge">get_posterior(X)</code> qui calcule les probabilités a posteriori des langues étant 
+donné un texte. En d’autre termes, 
+vous devez calculer </p>
+<p>
+\(
+\begin{align*}  
+P(lang \mid w_1, \dots, w_d) 
+&= P(lang) \prod_{i=1}^{d} P(w_i \mid lang)^{\mathrm{freq}(w_i)} \\
+&= log\Big(P(lang)\Big) + \sum_{i=1}^d log\Big(P(w_i \mid lang)\Big) \cdot \mathrm{freq}(w_i)
+\end{align*}
+\) 
+</p>
+<p>
+où \(log(\cdot)\) représente le logarithme naturel. Pour cette implémentation,
+on vous fournit les probabilités a priori \(P(lang)\) via le tableau <code class="language-plaintext highlighter-rouge">self.prior</code> de taille <code class="language-plaintext highlighter-rouge">n_langues</code> et les 
+probabilités des mots étant donné une langue \(P(wi\mid lang)\) sont dans la matrice <code class="language-plaintext highlighter-rouge">self.likelihood</code> de taille <code class="language-plaintext highlighter-rouge">n_langues x d</code>.</p>
+</p>
+<p>Finalement, implémentez la fonction <code class="language-plaintext highlighter-rouge">predict(X)</code> qui prédit la langue de chaque
+document présent dans l'entrée <code class="language-plaintext highlighter-rouge">X</code>. Le code fourni convertit déjà les langues en
+nombre naturel (par exemple, "français" peut être identifié par "1"). Vous devez donc simplement retourner un vecteur de dimension équivalente
+au nombre de lignes de la matrice <code class="language-plaintext highlighter-rouge">X</code> où chaque élément représente le code de la langue
+prédite.</p>
+<p>
+<b>Astuce</b>: rappelez-vous de la méthode <code class="language-plaintext highlighter-rouge">argmax</code> de Numpy dans le TP1
+   et de son argument <code class="language-plaintext highlighter-rouge">axis</code>.
+</p>
+
+<p>Utilisez la commande suivante pour tester votre code:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python NaiveBayesClassifier.py
+</code></pre></div></div>
+
+<p><strong>Prenez une capture d'écran de la matrice de confusion et interprétez les performances de votre classifieur.(1 point)</strong></p>
+
+<p>Une bonne implementation devrait passer le test ci-après:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">python</span> <span class="n">NaiveBayesClassifierTest</span><span class="p">.</span><span class="n">py</span> 
+</code></pre></div></div>
+
+</div>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="../tp3"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">IFT 615 — Intelligence artificielle</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name"></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+</body>
+
+</html>
