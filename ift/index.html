@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+		  integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+	<link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+	<title>
+		IFT615: Introduction à l'intelligence artificielle, Hiver 2023
+	</title>
+
+	<style type="text/css">
+        body {
+            font-family: 'Lato', sans-serif;
+        }
+
+        h1 {
+            font-size: 1.8em;
+        }
+
+        h2 {
+            font-size: 1.5em;
+        }
+
+        h3 {
+            font-size: 1.3em;
+        }
+		
+		ul.navbar-nav li.nav-item {
+			background-color: #005a20;
+			padding-top: 0.5rem;
+			padding-bottom: 0.5rem;	
+		}
+		#navbar {
+			padding: 0;
+		}
+		.badge-link {
+			border: 1px solid #005a20;
+			color: #005a20;
+			border-radius: .25rem;
+			font-size: 85%;
+			margin-top: .05rem;
+			margin-bottom: .05rem;
+			text-decoration: none;
+		}
+		.badge-link:hover {			
+			background-color: #005a20;
+			color: #fff
+		}
+		.assignment-block {
+			text-align: center;
+		}
+	</style>
+</head>
+
+
+<body data-spy="scroll">
+
+<div id="navscroll">
+	<nav id="navbar" class="navbar navbar-light navbar-expand-lg align-items-center" style="background-color: #018849;">
+		<div class="container">
+			<a class="navbar-brand" href="" style="color: #fff;"><strong>IFT615</strong> | Été 2022</a>
+			<button class="navbar-toggler collapsed" type="button" data-toggle="collapse"
+					data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+					aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="navbar-collapse ml-auto collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						  Travaux pratiques
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+						  <a class="dropdown-item" href="assets/tp/IFT615___TP1.zip" target="_blank">TP1</a>
+						  <a class="dropdown-item" href="travaux_pratiques/tp2/index.html" target="_blank">TP2</a>
+						  <a class="dropdown-item" href="travaux_pratiques/tp3/index.html" target="_blank">TP3</a>
+						  <a class="dropdown-item" href="travaux_pratiques/tp4/index.html" target="_blank">TP4</a>
+						  <a class="dropdown-item" href="travaux_pratiques/tp5/index.html" target="_blank">TP5</a>
+						</div>
+					  </li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+</div>
+
+<div class="container py-5">
+	<div class="row p-0">
+		<div class="col-md-8">
+			<h1>
+				<strong>IFT615</strong> | Introduction à l'intelligence artificielle
+			</h1>
+			<h2>Été 2022</h2>
+			<h3>Horaire:</h3>
+			<ul>
+				<li>Lundi 8:30-10:20</li>
+				<li>Mardi 9:30-10:20</li>
+			</ul>
+		</div>
+
+	</div>
+
+	<div class="row mt-1">
+		<h2>Description</h2>
+		<p>Connaître les principes et les techniques algorithmiques de base de l'intelligence artificielle. Savoir
+			choisir
+			et appliquer les différentes approches en fonction du problème à résoudre. Être sensibilisé à l'éthique de
+			l'intelligence artificielle.</p>
+
+		<h2>Contenu</h2>
+		<p>Concept d'agent intelligent. Apprentissage automatique (classification linéaire, minimisation d'une perte,
+			réseaux de neurones, apprentissage supervisée; apprentissage non supervisée; apprentissage par renforcement;
+			approximation de fonction). Raisonnement probabiliste (classifieur bayésien naïf, réseau bayésien, modèle de
+			Markov caché, réseau bayésien dynamique, filtre de particules;). Recherche heuristique globale. Recherche
+			heuristique locale (algorithmes génétiques; résolution de problèmes par la satisfaction de contraintes).
+			Planification et les jeux compétitifs (fonctions d'évaluation; théorie des jeux). Processus de décision de
+			Markov
+			(problèmes de décisions séquentielles, politiques optimales; algorithmes). Raisonnement avec logique de
+			premier
+			ordre; éthique de l'intelligence artificielle.</p>
+
+		<p>Les chapitres de la colonne &laquo Lectures &raquo font référence au manuel <a href="http://aima.cs.berkeley.edu/">AIMA</a>.<br/>
+		Pour les étudiant.es intéressé.es, voici un <a href="https://www.youtube.com/playlist?list=PL6Xpj9I5qXYGhsvMWM53ZLfwUInzvYWsm" target="_blank">lien</a> vers les capsules du cours IFT615 d'Hugo Larochelle sur YouTube.</p>
+	</div>
+
+	<hr/>
+
+	<div class="row">
+
+		<a class="anchor" id="syllabus"></a>
+
+		<h2>Plan de cours</h2>
+		<p>Une version PDF du plan de cours est disponible <a href="./assets/slides/ift615-00-plan.pdf" target="_blank">ici</a></p>
+		<div>
+			<table class="table table-bordered table-hover">
+				<thead>
+				<tr class="center">
+					<th class="col-xs fit">
+						<b>Semaine</b>
+					</th>
+					<th class="col-xs center fit">
+						<b>Date</b>
+					</th>
+					<th class="col-lg-4" style="width: 45%">
+						<b>Sujets</b>
+					</th>
+					<th class="col-lg-2" style="width: 10%">
+						<b>Lectures</b>
+					</th>
+					<th class="col-lg-2" style="width: 15%">
+						<b>Travaux</b>
+					</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr>
+					<!-- WEEK 1 -->
+					<td rowspan="3">1</td>
+					<td rowspan="2">LU 2/5</td>
+					<td>
+						<strong>Introduction</strong>
+						<ul>
+							<li>C'est quoi l'IA?</li>
+							<li>Agents intelligents</li>
+						</ul>
+						<strong>Présentation du plan de cours</strong>
+						<br/>
+						<a href="assets/slides/ift615-02-Agents-intelligents.pdf" target="blank">PDF</a>, 
+						<a href="assets/ppt/ift615-02-Agents-intelligents.pptx">PPT</a>
+					</td>
+					<td>1 &amp; 2</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>
+						<strong>Apprentissage automatique</strong>
+						<ul>
+							<li>Formes d'apprentissage</li>
+							<li>Algorithme des K plus proches voisins</li>
+						</ul>
+						<a href="assets/slides/ift615-03-Formes_apprentissage_et_knn.pdf" target="blank">PDF</a>, 
+						<a href="assets/ppt/ift615-03-Formes_apprentissage_et_knn.pptx">PPT</a>
+					</td>
+					<td>19.1 à 19.2, <br/>19.7.1</td>
+					<td class="assignment-block" rowspan="2">
+						TP1 (JC)
+						<br/>
+						(Remise 24 mai)
+						<br/>
+						<a href="assets/tp/IFT615___TP1.pdf" target="_blank">Énoncé</a>
+						<br/>
+						<a href="assets/tp/IFT615___TP1.zip" target="_blank">Fichiers</a>
+					</td>
+				</tr>
+				<tr>
+					<td>MA 3/5</td>
+					<td>
+						<ul>
+							<li>Classification linéaire avec le Perceptron</li>
+							<li>Minimisation d'une perte par la descente du gradient</li>
+						</ul>
+						<a href="assets/slides/ift615-04-Classification_lineaire_avec_le_perceptron.pdf" target="blank">PDF</a>, 
+						<a href="assets/ppt/ift615-04-Classification_lineaire_avec_le_perceptron.pptx">PPT</a>
+					</td>
+					<td>19.6.1 à 19.6.4</td>
+				</tr>
+
+				<!-- WEEK 2 -->
+				<tr>
+					<td rowspan="2">2</td>
+					<td>LU 9/5</td>
+					<td>
+						<ul>
+							<li>Régression logistique</li>
+							<li>Réseau de neurones artificiel</li>
+						</ul>
+						<a href="assets/slides/ift615-05-Regression_logistique_et_reseau_de_neurones_artificiel.pdf" target="blank">PDF</a>, 
+						<a href="assets/ppt/ift615-05-Regression_logistique_et_reseau_de_neurones_artificiel.pptx">PPT</a>
+					</td>
+					<td>19.6.5 <br/>21.1.1</td>
+					<td class="assignment-block" rowspan="4">
+						TP2 (JC)
+						<br/>
+						(Remise 31 mai)
+						<br/>
+						<a href="travaux_pratiques/tp2/index.html" target="_blank">Énoncé</a>
+						<br/>
+						<a href="assets/tp/IFT615_TP2.zip" target="_blank">Fichiers</a>
+					</td>
+				</tr>
+				<tr>
+					<td>MA 10/5</td>
+					<td>
+						<ul>
+							<li>Rétropropagation du gradient</li>
+						</ul>
+					</td>
+					<td>21.1.2</td>
+				</tr>
+				<tr>
+					<td rowspan="2">3</td>
+					<td>LU 16/5</td>
+					<td>
+						<strong>Application - Vision artificielle</strong>
+						<ul>
+							<li>Convolution</li>
+							<li>Pooling</li>
+							<li>Architecture CNN</li>
+						</ul>
+						<a href="assets/slides/ift615-06-Application_-_vision_artificielle.pdf" target="blank">PDF</a>, 
+						<a href="assets/ppt/ift615-06-Application_-_vision_artificielle.pptx">PPT</a>
+					</td>
+					<td>21.3 <br/>25.1 à 25.4</td>
+				</tr>
+				<tr>
+					<td>MA 17/5</td>
+					<td>
+						<strong>Application - Traitement du language naturel</strong>
+						<ul>
+							<li>Modèle RNN</li>
+							<li>Étiquetage syntaxique</li>
+						</ul>
+						<a href="assets/slides/ift615-07-Application_-_TLN_-_world_embedding_et_etiquetage_syntaxique.pdf" target="blank">PDF</a>, 
+						<a href="assets/ppt/ift615-07-Application_-_TLN_-_world_embedding_et_etiquetage_syntaxique.pptx">PPT</a>
+					<td>24.1, 21.6, 24.2</td>
+				</tr>
+
+				<!-- WEEK 4 -->
+				<tr>
+					<td rowspan="2">4</td>
+					<td>LU 23/5</td>
+					<td><strong>Congé universitaire - Journée des Patriotes</strong></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>MA 24/5</td>
+					<td>
+						<strong>Apprentissage automatique</strong>
+						<ul>
+							<li>Arbres de décision</li>
+						</ul>
+						<a href="assets/slides/ift615-08-Apprendre_des_arbres_de_decision.pdf" target="blank">PDF</a>, 
+						<a href="assets/ppt/ift615-08-Apprendre_des_arbres_de_decision.pptx">PPT</a>
+					</td>
+					<td>19.3</td>
+					<td class="assignment-block">
+						Quiz 1 (DN)
+						<br/>
+						(Remise 7 juin)
+						<br/>
+						<a href="assets/quiz/ift615-quiz1.pdf" target="_blank">Énoncé</a>
+					</td>
+				</tr>
+				<!-- WEEK 5 -->
+				<tr>
+					<td rowspan="3">5</td>
+					<td rowspan="2">LU 30/5</td>
+					<td>
+						<strong>Apprentissage automatique</strong>
+						<ul>
+							<li>Enjeux liés au développement d'applications : collection, qualité et gestion de données
+								; ingénierie de features ; sélection et optimisation de modèles ; interprétabilité et
+								explicabilité.
+							</li>
+							<a href="assets/slides/ift615-09-Enjeux_lies_au_developpement_d_applications.pdf" target="blank">PDF</a>, 
+							<a href="assets/ppt/ift615-09-Enjeux_lies_au_developpement_d_applications.pptx">PPT</a>
+						</ul>
+					</td>
+					<td>19.4, 19.9 <br/>21.5.2 à 21.5.4</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>
+						<strong>Raisonnement probabiliste</strong>
+						<ul>
+							<li>Inférences avec une distribution conjointe</li>
+							<a href="assets/slides/ift615-10-Raisonnement probabiliste-notions_de_base_et_classifieur_bayesien_naif.pdf" target="blank">PDF</a>, 
+							<a href="assets/ppt/ift615-10-Raisonnement_probabiliste_-_notions_de_base_et_classifieur_bayesien_naif.pptx">PPT</a>
+						</ul>
+					<td>12.1 à 12.6</td>
+					<td class="assignment-block" rowspan="9">
+						TP3 (JC)
+						<br/>
+						(Remise 3 juillet)
+						<br/>
+						<a href="travaux_pratiques/tp3/index.html" target="_blank">Énoncé</a>
+						<br/>
+						<a href="assets/tp/IFT615_TP3.zip" target="_blank">Fichiers</a>
+					</td>
+				</tr>
+				<tr>
+					<td>MA 31/5</td>
+					<td>
+						<ul>
+							<li>Classifieur bayésien naïf (application : classification de documents)</li>
+						</ul>
+					</td>
+					<td></td>
+				</tr>
+
+				<!-- WEEK 6-->
+				<tr>
+					<td rowspan="2">6</td>
+					<td>LU 6/6</td>
+					<td>
+						<ul>
+							<li>Réseaux bayésiens</li>
+						</ul>
+						<a href="assets/slides/ift615-11-Raisonnement_probabiliste_-_reseau_bayesien.pdf" target="blank">PDF</a>, 
+						<a href="assets/ppt/ift615-11-Raisonnement_probabiliste_-_reseau_bayesien.pptx">PPT</a>
+					</td>
+					<td>13.1 à 13.4</td>
+				</tr>
+
+				<tr>
+					<td>MA 7/6</td>
+					<td>
+						<ul>
+							<li>Types d'inférence temporel</li>
+							<li>Réseaux bayésiens dynamiques</li>
+						</ul>
+						<a href="assets/slides/ift615-12-Raisonnement_probabiliste_temporel.pdf" target="blank">PDF</a>, 
+						<a href="assets/ppt/ift615-12-Raisonnement_probabiliste_temporel.pptx">PPT</a>
+					</td>
+					<td>14.1 à 14.3</td>
+				</tr>
+
+				<!-- WEEK 7 -->
+				<tr>
+					<td rowspan="4">7</td>
+					<td rowspan="2">LU 13/6</td>
+					<td>
+						<ul>
+							<li>Modèle de Markov caché</li>
+						</ul>
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>
+						<ul>
+							<li>Filtre de particules</li>
+						</ul>
+					</td>
+					<td>14.5.3</td>
+				</tr>
+				<tr>
+					<td rowspan="2">MA 14/6</td>
+					<td>
+						<strong>Application - Traitement du langage naturel</strong>
+						<ul>
+							<li>Modèles du language</li>
+						</ul>
+						<a href="assets/slides/ift615-13-Applications_-_TLN_-_modeles_du_langage.pdf" target="blank">PDF</a>, 
+						<a href="assets/ppt/ift615-13-Applications_-_TLN_-_modeles_du_langage.pptx">PPT</a>
+					</td>
+					<td>23.1 à 23.3, 23.6</td>
+				</tr>
+				<tr>
+					<td>
+						<strong>Révision en vue de l'intra</strong>
+						<br/>
+						<a href="assets/slides/ift615-14-Revisions-intra.pdf" target="blank">PDF</a>, 
+						<a href="assets/ppt/ift615-14-Revisions-intra.pptx">PPT</a>
+					</td>
+					<td></td>
+				</tr>
+				<!-- WEEK 8 -->
+				<tr>
+					<td>8</td>
+					<td colspan="3" style="text-align: center">
+						<strong>Période des examens périodiques</strong>
+					</td>
+				</tr>
+				
+
+				<!-- WEEK 9 -->
+				<tr>
+					<td rowspan="3">9</td>
+					<td rowspan="2">LU 27/6</td>
+					<td>
+						<strong>Recherche heuristique globale</strong>
+						<ul>
+							<li>Algorithme A*</li>
+						</ul>
+						<a href="assets/slides/ift615-15-Recherche_heuristique_globale.pdf" target="blank">PDF</a>, 
+						<a href="assets/ppt/ift615-15-Recherche_heuristique_globale.pptx">PPT</a>
+					</td>
+					<td>3</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>
+						<strong>Processus de décision de Markov</strong>
+						<ul>
+							<li>Valeur d'un plan</li>
+						</ul>
+						<a href="assets/slides/ift615-16-MDP.pdf" target="blank">PDF</a>, 
+						<a href="assets/ppt/ift615-16-MDP.pptx">PPT</a>
+					<td>17.1</td>
+					<td rowspan="6" class="text-center">
+						TP4 (DN)
+						<br/>
+						(Remise 19 juillet)
+						<div class="text-center">
+						
+						<a href="travaux_pratiques/tp4/index.html" target="_blank">Énoncé</a>
+						<br/>
+						<a href="assets/tp/IFT615_TP4.zip" target="_blank">Fichiers</a>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>MA 28/6</td>
+					<td>
+						<ul>
+							<li>Algorithme d'itération par valeur</li>
+						</ul>
+						<a href="assets/slides/ift615-17-Apprentissage-par-renforcement.pdf" target="blank">PDF</a>, 
+						<a href="assets/ppt/ift615-17-Apprentissage-par-renforcement.pptx" target="blank">PPT</a>
+					</td>
+					<td>17.2</td>
+				</tr>
+
+				<!-- WEEK 10 -->
+				<tr>
+					<td rowspan="3">10</td>
+					<td rowspan="2">LU 4/7</td>
+					<td>
+						<ul>
+							<li>Algorithme d'itération par politique</li>
+						</ul>
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>
+						<strong>Correction de l'intra</strong>
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>MA 5/7</td>
+					<td>
+						<strong>Apprentissage par renforcement</strong>
+						<ul>
+							<li>Apprentissage passif</li>
+						</ul>
+					</td>
+					<td>22.1 à 22.2</td>
+				</tr>
+				
+				<!-- WEEK 11 -->
+				<tr>
+					<td rowspan="3">11</td>
+					<td rowspan="2">LU 11/7</td>
+					<td>
+						<ul>
+							<li>Apprentissage actif: Q-Learning & SARSA</li>
+						</ul>
+					</td>
+					<td>22.3</td>
+				</tr>
+				<tr>
+					<td>
+						<ul>
+							<li>Approximation de fonction</li>
+						</ul>
+					</td>
+					<td>22.4</td>
+					<td rowspan="4" class="text-center">
+						TP5 (DN)
+						<br/>
+						(Remise 8 août)
+						<div class="text-center">
+							<a href="travaux_pratiques/tp5/index.html" target="_blank">Énoncé</a>
+						<br/>
+						<a href="assets/tp/IFT615_TP5.zip" target="_blank">Fichiers</a>
+						</div>
+					</td>
+				</tr>
+
+				<tr>
+					<td>MA 12/7</td>
+					<td>
+						<strong>Planification dans les jeux compétitifs</strong>
+						<ul>
+							<li>Théorie des jeux</li>
+							<li>Minmax</li>
+						</ul>
+						<a href="assets/slides/ift615-18-Planification_dans_les_jeux_competitifs.pdf" target="blank">PDF</a>,
+						<a href="assets/ppt/ift615-18-Planification_dans_les_jeux_competitifs.pptx" target="blank">PPT</a>
+					</td>
+					<td>5.1 à 5.2</td>
+				</tr>
+
+				<!-- WEEK 12 -->
+				<tr>
+					<td rowspan="3">12</td>
+					<td rowspan="2">LU 18/7</td>
+					<td>
+						<ul>
+							<li>Fonction d'évaluation</li>
+							<li>Élagage Alpha-beta heuristique</li>
+						</ul>
+					</td>
+					<td>5.3</td>
+				</tr>
+				<tr>
+					<td>
+						<ul>
+							<li>Monte-Carlo Tree-Search</li>
+							<li>Jeux stochastiques</li>
+						</ul>
+					</td>
+					<td>5.4 à 5.5</td>
+				</tr>
+				<tr>
+					<td>MA 19/7</td>
+					<td>
+						<strong>Recherche heuristique locale</strong>
+						<ul>
+							<li>Algorithme hill-climbing</li>
+							<li>Algorithme recuit simulé</li>
+						</ul>
+						<a href="assets/slides/ift615-19-Recherche_locale.pdf" target="_blank">PDF</a>
+						<a href="assets/ppt/ift615-19-Recherche_locale.pptx" target="_blank">PPT</a>
+					</td>
+					<td>4.1</td>
+					<td rowspan="4" class="assignment-block">
+						Quiz 2 (DN)
+						<br/>
+						(Remise 1er août)
+						<br/>
+						<a href="assets/quiz/ift615-quiz2.pdf" target="_blank">Énoncé</a>
+					</td>
+				</tr>
+
+				<!-- WEEK 13 -->
+				<tr>
+					<td rowspan="3">13</td>
+					<td rowspan="2">LU 25/7</td>
+					<td>
+						<ul>
+							<li>Algorithmes génétiques</li>
+						</ul>
+					</td>
+					<td>4.1</td>
+				</tr>
+				<tr>
+					<td>
+						<ul>
+							<li>Résolution de problèmes par la satisfaction de contraintes: backtracking search</li>
+						</ul>
+					</td>
+					<td>6.1 à 6.3</td>
+				</tr>
+				<tr>
+					<td>MA 26/7</td>
+					<td>
+						<ul>
+							<li>Résolution de problèmes par la satisfaction de contraintes: heuristiques, recherche locale</li>
+						</ul>
+						<a href="assets/slides/ift615-20-Recherche_locale_par_la_satisfaction_de_contraintes.pdf" target="blank">PDF</a>,
+						<a href="assets/ppt/ift615-20-Recherche_locale_par_la_satisfaction_de_contraintes.pptx" target="blank">PPT</a>
+					</td>
+					<td>6.4</td>
+				</tr>
+				
+				<!-- WEEK 14 -->
+				<tr>
+					<td rowspan="3">14</td>
+					<td>LU 1/8</td>
+					<td>
+						<strong>Raisonnement logique</strong>
+						<ul>
+							<li>Syntaxe et sémantique</li>
+							<li>Inférence du premier ordre</li>
+						</ul>
+					</td>
+					<td>9.1 à 9.3</td>
+					<td class="assignment-block" rowspan="3">
+						Quiz 3 (DN)
+						<br/>
+						(Remise 8 août)
+						<br/>
+						<a href="assets/quiz/ift615-quiz3.pdf" target="_blank">Énoncé</a>
+					</td>
+				</tr>
+				<tr>
+					<td rowspan="2">MA 2/8</td>
+					<td>
+						<ul>
+							<li>Planification classique</li>
+						</ul>
+					</td>
+					<td>11.1 à 11.2</td>
+				</tr>
+				<tr>
+					<td>
+						<strong>Application - robotique</strong>
+					</td>
+					<td>26.4.1 à 26.4.2, 26.5.1 à 26.5.2</td>
+				</tr>
+				
+				<!-- WEEK 15 -->
+				<tr>
+					<td rowspan="2">15</td>
+					<td rowspan="2">LU 8/8</td>
+					<td>
+						<strong>Philosophie, éthique, sécurité et futur de l'IA</strong>
+					</td>
+					<td>27, 28</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>
+						<strong>Révision</strong>
+					</td>
+					<td></td>
+					<td></td>
+				</tr>
+
+				<!-- WEEK 16 -->
+				<tr>
+					<td>16</td>
+					<td colspan="4" style="text-align: center;">
+						<strong>Mardi 9 août au vendredi 19 août: Examens de fin de trimestre</strong>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+		<a href="https://www.youtube.com/playlist?list=PL6Xpj9I5qXYGhsvMWM53ZLfwUInzvYWsm" target="_blank">Capsules du cours IFT615 d'Hugo Larochelle sur YouTube</a>
+		<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+		<script src="/assets/js/ie10-viewport-bug-workaround.js"></script>
+	</div>
+</div>
+</body>
+</html>
