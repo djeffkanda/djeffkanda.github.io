@@ -1,7 +1,6 @@
 ---
 layout: post
-date: 2016-01-15 07:59:00-0400
+date: 2022-10-26 12:30:00-0400
 inline: true
 ---
-
-A simple inline announcement with Markdown emoji! :sparkles: :smile:
+Presentation of my work at the [Public Safety Canada symposium](https://www.publicsafety.gc.ca/cnt/ntnl-scrt/cbr-scrt/ndstrl-cntrl-sstms/index-en.aspx) 2022.

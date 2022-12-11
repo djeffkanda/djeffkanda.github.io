@@ -1,12 +1,10 @@
 github_users:
-  - torvalds
-  - alshedivat
+  - djeffkanda
+
 
 github_repos:
-  - alshedivat/al-folio
-  - twbs/bootstrap
-  - jekyll/jekyll
-  - jquery/jquery
-  - FortAwesome/Font-Awesome
-  - jpswalsh/academicons
-  - mathjax/MathJax
+  - djeffkanda/market_coverage_analysis
+  - ireydiak/anomaly_detection_NRCAN
+  - djeffkanda/BEARmod
+  - djeffkanda/GSMA
+
