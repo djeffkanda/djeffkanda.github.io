@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="apple-mobile-web-app-title" content="CS 188">
+  <meta name="application-name" content="CS 188">
+  <meta name="msapplication-TileColor" content="#3b7ea1">
+  <meta name="theme-color" content="#3b7ea1">
+
+  <title>
+    TP1 - IFT615: Introduction à l'intelligence artificielle, Hiver 2023
+  </title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../../assets/css/main.css">
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      CommonHTML: {
+        linebreaks: { automatic: true },
+        scale: 90,
+        preferredFont: "Latin Modern"
+      },
+      "HTML-CSS": {
+        linebreaks: { automatic: true },
+        scale: 90,
+        preferredFont: "Latin Modern"
+      },
+     SVG: {
+       linebreaks: { automatic: true },
+       scale: 90,
+       preferredFont: "Latin Modern"
+     }
+    });
+  </script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+  <style type="text/css">
+    nav.navbar {
+      background-color: #005a20;
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body data-spy="scroll" data-target="#toc">
+  <div id="navscroll">
+    <nav id="navbar" class="navbar navbar-light navbar-expand-lg align-items-center">
+      <div class="container">
+        <a class="navbar-brand" href="../../index.html" style="color: #fff;"><strong>IFT615</strong> | Hiver 2022</a>
+        <button class="navbar-toggler collapsed" type="button" data-toggle="collapse"
+          data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+          aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+      </div>
+    </nav>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" type="text/javascript"></script> 
+  <script src="../../assets/js/parallax.min.js"></script>
+  <script src="../../assets/js/main.min.js"></script>
+
+
+  <div class='container'>
+    <div class="row">
+      <div class="col-sm-3">
+        <nav id="toc" data-toggle="toc" class="sticky-top" style="top: 40px; margin-bottom: 40px">
+          <ul class="nav navbar-nav">
+            <li>
+              <a class="nav-link" href="#introduction">Introduction</a>
+            </li>
+            <li>
+              <a class="nav-link" href="#installation">Installation</a>
+            </li>
+            <li>
+              <a class="nav-link" href="#provided-code">Code fourni</a>
+            </li>
+           
+            <li>
+              <a class="nav-link" href="#Q1">Question 1 : Perceptron binaire (24 pts)</a>
+            </li>
+            <li>
+              <a class="nav-link" href="#Q2">Question 2 : Perceptron multi-classe (13pts)</a>
+            </li>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <div class="col-sm-9">
+        <h1 class="mt-1 center" id="project-5-machine-learning">TP 1 : Perceptron</h1>
+
+        <center>Version 1.0. Dernière mise à jour : 05-01-2023.</center>
+        <center>Remise : <b>19 janvier 23:59</b> à <b>23:59</b></center>
+        <em>Tout retard vaudra 0. Le non respect des noms de fichiers à soumettre peut entrainer des pénalités, allant jusqu’à une note de 0.</em>
+        <center>Mode de soumission : Turnin TP1</center>
+        <center>Total de points : 40</center>
+        <center>Pondération : 8%</center>
+        <center>Email du correcteur : <a href="mailto:nkad2101@usherbrooke.ca">djeff.nkashama.kanda@usherbrooke.ca</a></center>
+
+        <hr />
+
+        <img src="chrometrans.png" alt="Visualisation des erreurs de classifications sur Fashion-MNIST" class="img-fluid center-image" style="width: 500px;" />
+
+        <!-- <p>Dans ce projet, vous devez monter différents réseaux de neurones pour différentes tâches de classification et de régression.</p> -->
+        <h2 id="introduction">Introduction</h2>
+
+        <p>Dans ce travail pratique, vous êtes invité à implémenter un modèle de classification linéaire appelé le perceptron, et le tester sur des données. L'ensemble de données \(\mathbb{D}=\left\{(x_i, y_i) : i =0,...,N; x_i \in \mathbb{R}^D, yi \in \{0,...,C\}\right\}\) est fourni sous forme d’une matrice \(X \in \mathbb{R}^{N \times D}\) et \(Y \in \mathbb{\{0, 1\}}^{N}\), avec \(N\) le nombre d'exemples, et \(D\), la dimension de chaque exemple.</p>
+
+        <p>Notons \({y_i}\), et \(\hat{y_i}\), la classe réelle (ground truth) et la classe prédicte de la donnée \(x_i \in X\), respectivement.</p>
+
+        <p>Nous avons vu que  \(\hat{y} = h_w(x_i)=Threshold(\mathbf{w} \cdot \mathbf{x^T} + b)\). Voir <em>ift615-04-Classification lineaire avec le perceptron--slides 3-6</em></p>
+
+        <p>Voici l'algorithme de la règle de perceptron:</p>
+
+        <center><img src="algo.png" alt="algo perceptron" class="img-fluid center-image" /></center>
+
+
+
+        <p>Le code pour ce projet est disponibles ici : <a
+            href="../../assets/tp/IFT615_TP1.zip">fichier compressé</a>.</p>
+
+
+        <p><strong>Fichiers à modifier et soumettre :</strong> vous devez remplir les sections manquantes du fichier
+          <code class="highlighter-rouge">models.py</code>. Il faut ne faut pas modifier les autres fichiers.
+        </p>
+
+        <p><strong>Évaluation :</strong> l'auto-correcteur s'assure du bon fonctionnement de votre code.
+          Ne changez aucun nom de fonction ou nom de classe dans le code, sans quoi l'auto-correcteur ne fonctionnera
+          pas.
+          L'auto-correcteur ne détermine pas entièrement votre résultat final. La qualité de votre implémentation - et
+          non les résultats obtenus par l'auto-correcteur - déterminent votre résultat final.<br>
+          Pour évaluer votre code, vous pouvez utiliser l’auto-correcteur automatique à l’aide de la commande:
+
+			<pre class="highlighter-rouge"><code>python autograder.py</code></pre>
+		Pour évaluer une question spécifique, par exemple la question 1 :
+			<pre class="highlighter-rouge"><code>python autograder.py -q q1</code></pre>
+
+		Certaines questions affichent des graphiques pour faciliter votre développement. Vous pouvez en tout temps arrêter cet affichage à l’aide du flag –no-graphics.
+		
+		<pre class="highlighter-rouge"><code>python autograder.py --no-graphics</code></pre>
+		
+         
+
+        </p>
+
+        <p><strong>Utilisation des données :</strong> une partie des notes obtenues dépend de la performance de votre modèle
+          sur l'ensemble de test.
+          La base de code n'offre aucun API permettant d'accéder à cet ensemble directement. Par conséquent, toute
+          tentative de modification des données de test sera considérée comme de la tricherie et sera sévèrement pénalisée en conséquence.
+        </p>
+
+        <p><strong>Aide :</strong> N'hésitez pas à contacter les assistants à l'enseignement pour ce cours afin de vous aider dans le travail.</p>
+        <hr />
+
+        <h2 id="installation">Installation</h2>
+
+        <p>Pour ce projet, vous devez installer des librairies suivantes :</p>
+        <ul>
+          <li><a href="http://www.numpy.org/">numpy</a>
+          </li>
+          <li><a href="http://www.numpy.org/">scikit-learn</a>
+          </li>
+          <li><a href="https://matplotlib.org/">matplotlib</a>, une librairie de visualisation -
+            <a href="https://matplotlib.org/users/installing.html">installation</a>
+          </li>
+         
+        </ul>
+        <p><strong>Note :</strong> Vous devez avant tout créer un environement virtuel de la manière suivante:
+          <ul>
+            <li> <strong>Avec pip : </strong>
+              <div class="highlight">
+            <pre class="highlighter-rouge"><code>python -m venv env</code></pre>
+            <pre class="highlight"><code>pip install matplotlib scikit-learn numpy</code></pre>
+            
+              </div>
+
+            </li>
+            <li> <strong>Avec conda : </strong>
+              <div class="highlight">
+            <pre class="highlighter-rouge"><code>conda create --name ift615 python=3.9
+</code></pre>
+            <pre class="highlight"><code>conda activate ift615</code></pre>
+
+            <pre class="highlight"><code>conda install scikit-learn matplotlib</code></pre>
+            
+              </div>
+
+            </li>
+          </ul>
+
+         <p>Voici les liens ressources pour vous familiariser avec <a href="https://docs.conda.io/projects/conda/en/4.6.0/_downloads/52a95608c49671267e40c689e0bc00ca/conda-cheatsheet.pdf"> conda</a> et <a href="https://realpython.com/numpy-array-programming/">numpy</a>.</p>
+
+Vous pouvez vérifier que votre environment et les dépendances sont bien installés en utilisant la commande ci-dessous:
+         <div class="highlight">
+            <pre class="highlighter-rouge"><code>
+python autograder.py --check -dependencies
+</code></pre>
+            
+              </div>
+
+        
+        <hr />
+
+        <!-- QUESTION 1 -->
+        <div id="Q1">
+          <h2 id="question-1">Question 1 : Perceptron binaire (24 pts)</h2>
+          <h3>a) Mise à jour manuelle du perceptron (6 pts)</h3>
+
+          À partir du tableau ci-dessous, exécutez une itération complète de l’algorithme du perceptron avec un taux d’apprentissage α = 0.1. Donnez la valeur des poids \(\mathbf{w}\) et du biais b après chaque donnée parcourue. Prenez en photo vos calculs et incluez les dans un fichier nommé <code class="highlighter-rouge">tp1-calculs.png</code>. 
+
+          <center><img src="table.png" alt="truth table " class="img-fluid center-image" /></center>
+
+
+		  <h3>b) Visualisation de la barrière de décision (5 pts)</h3>
+		  Il est souvent utile de visualiser la barrière de décision d’un modèle d’apprentissage automatique. Cela nous permet notamment d’évaluer visuellement la capacité de généralisation et la qualité de notre modèle. Supposez que les paramètres optimaux du perceptron sont \(\mathbf{w}^∗ = (0.0001~~~ 0.0001)\) et \(b^∗ = −0.0006\). Dessinez le nuage de points avec les données du tableau ci-dessus et tracez la droite représentant la barrière de décision. Dessinez le graphique sur une feuille et prenez-la en photo ou utilisez un logiciel pour produire la droite et le nuage de points. Nommez le fichier q1b.png et ajoutez le à votre soumission. Prenez en photo vos calculs et incluez les dans le fichier <code class="highlighter-rouge">tp1-calculs.png</code>. Voici un exemple de solution avec des données différentes :
+          <center><img src="graph.png" alt="decision boundary" class="img-fluid center-image" /></center>
+
+          <b>Astuces</b>
+          <ul>
+          	<li>Définissez l’équation de la droite et isolez en fonction de \(x1\) et \(x2\). Déterminer l’ordonnée et l’abscisse à l’origine et finalement trouver la pente de la droite.</li>
+          	<li>Vous pouvez utiliser les logiciels <em>Geogebra</em>, <em>Desmos</em> ou encore la librairie <em>Matplotlib</em> afin de produire le nuage de points.</li>
+          </ul>
+
+          <h3>c) Implémentation informatique du perceptron binaire (13 pts)</h3>
+
+         <p> Maintenant que vous maîtrisez la procédure de mise à jour du perceptron, vous pouvez implémenter l’algorithme complet. Un squelette de code est déjà fourni. Vous devez le compléter.<br>
+Complétez les fonctions <code class="highlighter-rouge">init_params, threshold, predict, fit</code> de la classe <code class="highlighter-rouge">BinaryPerceptron</code> à partir du fichier <code class="highlighter-rouge">models.py</code>.
+         </p>
+          <b>Note</b>: La librairie <code>Numpy</code> profite d’accélération matérielle afin de rendre les calculs mathématiques très rapides. Pour cette raison, vous êtes encouragé à utiliser son API et éviter les boucles et itérations qui ralentissent significativement l’exécution de votre code. Un excellent tutoriel sur Numpy est offert sur ce <a href="https://realpython.com/numpy-array-programming/">lien</a>.
+          <p>
+
+          <h4>Barème</h4>
+          <table class="table table-bordered">
+            <tbody>
+              <tr>
+                <td><b>Critère</b></td><td><b>Points</b></td>
+              </tr>
+              <tr>
+                <td>fit</td><td>5</td>
+              </tr>
+              <tr>
+                <td>predict</td><td>3</td>
+              </tr>
+              <tr>
+                <td>init_params</td><td>2</td>
+              </tr>
+              <tr>
+                <td>threshold</td><td>1</td>
+              </tr>
+              <tr>
+                <td>Pas de boucles <code class="highlighter-rouge">for</code> inutiles (code vectorisé)</td><td>1</td>
+              </tr>
+              <tr>
+                <td>qualité / lisibilité du code</td><td>1</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td><b>Total</b></td><td><b>13</b></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        Pour évaluer votre code, vous pouvez utiliser l’auto-correcteur automatique à l’aide de la commande.
+        <pre class="highlighter-rouge"><code>python autograder.py -q q1</code></pre>
+
+        <hr />
+
+        <!-- QUESTION 2 -->
+        <div id="Q2">
+          <h2 id="question-2">Question 2 : Perceptron multi-classe (13pts)</h2>
+          
+
+          <p>
+          	Nous avons traité le cas du perceptron binaire. Nous pouvons maintenant généraliser son application à plusieurs classes. Dans cet exercice, nous entraînons un perceptron à reconnaître des chiffres manuscrits. Pour ce faire, nous utilisons la célèbre base de données NIST (à ne pas confondre avec MNIST) qui contient 1797 exemples de chiffres manuscrits en 16 tonalités de gris. Chaque image est de taille (8, 8) et par conséquent nos données sont de la forme \(X \in \mathbb{R}^{1797 \times 64}\). <br>
+
+          	Le perceptron multiclasse se comporte de manière similaire au perceptron binaire, mais utilise plutôt un vecteur de poids par classe, un vecteur pour le biais et un critère de décision différent. Formellement, soit \(\mathbf{C}\) le nombre de classes distinctes à prédire, \(\mathbf{W} \in \mathbb{R}^{C \times D}\) la matrice des poids et \(\mathbf{b} \in \mathbb{R}^{C}\) le vecteur de biais. L’objectif du percetron multiclasse est de trouver la matrice \(\mathbf{W}^*\) et le vecteur \(\mathbf{b}^*\) qui minimisent les erreurs de classification.<br><br>
+
+Dans ce cas, la logique du score demeure la même, mais on effectue maintenant un produit matriciel plutôt qu’un produit vectoriel. Pour chaque donnée \(x_i\), son score est un vecteur de taille \(\mathbf{C}\). La classe prédite sera celle avec le plus grand score.<br>
+
+\(h_w(\mathbf{X}) = argmax \left\{\mathbf{X}\mathbf{W}^T + \mathbf{b}\right\}\). 
+          </p>
+
+          <p>
+          	Lors d’une itération sur une donnée \(\mathbf{x_i} \in \mathbf{X}\), on compare l’étiquette \(y_i\) avec sa prédiction \(\hat{y}_i\). Si \(y_i = \hat{y}_i\), on ne fait rien. Sinon, on doit mettre à jour les poids correspondant à \(y_i \) et \(\hat{y}_i\) afin d’éviter prévenir cette erreur de classification.
+
+          	<center>
+          		\(\mathbf{W}_{\hat{y}}=\mathbf{W}_{\hat{y}} - \alpha \mathbf{x_i}\)<br>
+          		\(\mathbf{b}_{\hat{y}}=\mathbf{b}_{\hat{y}} - \alpha\)<br><br>
+
+          		\(\mathbf{W}_{{y}}=\mathbf{W}_{{y}} + \alpha \mathbf{x_i}\)<br>
+          		\(\mathbf{b}_{{y}}=\mathbf{b}_{{y}} + \alpha\)<br>
+          	</center>
+          </p>
+
+          <p>
+          	Dans le fichier <code>models.py</code>, implémentez les méthodes <code>init_params</code>, <code>predict</code> et <code>fit</code> de la classe <code>MulticlassPerceptron</code>.
+          </p>
+
+          <h4>Barème</h4>
+          <table class="table table-bordered">
+            <tbody>
+              <tr>
+                <td><b>Critère</b></td><td><b>Points</b></td>
+              </tr>
+              <tr>
+                <td>fit</td><td>5</td>
+              </tr>
+              <tr>
+                <td>predict</td><td>5</td>
+              </tr>
+              <tr>
+                <td>init_params</td><td>2</td>
+              </tr>
+              
+              <tr>
+                <td>Pas de boucles <code class="highlighter-rouge">for</code> inutiles (code vectorisé)</td><td>3</td>
+              </tr>
+              <tr>
+                <td>qualité / lisibilité du code</td><td>1</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td><b>Total</b></td><td><b>16</b></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        Pour évaluer votre code, vous pouvez utiliser l’auto-correcteur automatique à l’aide de la commande.
+        <pre class="highlighter-rouge"><code>python autograder.py -q q2</code></pre>
+
+        
+      </div>
+
+</body>
+
+</html>
