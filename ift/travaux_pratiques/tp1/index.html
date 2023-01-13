@@ -153,9 +153,6 @@
 		Certaines questions affichent des graphiques pour faciliter votre développement. Vous pouvez en tout temps arrêter cet affichage à l’aide du flag –no-graphics.
 		
 		<pre class="highlighter-rouge"><code>python autograder.py --no-graphics</code></pre>
-		
-         
-
         </p>
 
         <p><strong>Utilisation des données :</strong> une partie des notes obtenues dépend de la performance de votre modèle
@@ -297,14 +294,18 @@ Dans ce cas, la logique du score demeure la même, mais on effectue maintenant u
           </p>
 
           <p>
-          	Lors d’une itération sur une donnée \(\mathbf{x_i} \in \mathbf{X}\), on compare l’étiquette \(y_i\) avec sa prédiction \(\hat{y}_i\). Si \(y_i = \hat{y}_i\), on ne fait rien. Sinon, on doit mettre à jour les poids correspondant à \(y_i \) et \(\hat{y}_i\) afin d’éviter prévenir cette erreur de classification.
+            Lors d’une itération sur une donnée \(\mathbf{x_i} \in \mathbf{X}\), on compare <b>son étiquette \(y_i\)</b>
+            avec <b>sa prédiction \(\hat{y}_i\)</b>. Si \(y_i = \hat{y}_i\),
+            on ne fait rien. Sinon, on doit mettre à jour les poids associés au neurone \(y_i \) et \(\hat{y}_i\)
+            comme suit, afin d’éviter cette erreur de classification.
 
           	<center>
-          		\(\mathbf{W}_{\hat{y}}=\mathbf{W}_{\hat{y}} - \alpha \mathbf{x_i}\)<br>
-          		\(\mathbf{b}_{\hat{y}}=\mathbf{b}_{\hat{y}} - \alpha\)<br><br>
 
-          		\(\mathbf{W}_{{y}}=\mathbf{W}_{{y}} + \alpha \mathbf{x_i}\)<br>
-          		\(\mathbf{b}_{{y}}=\mathbf{b}_{{y}} + \alpha\)<br>
+          		\(\mathbf{W}[{\hat{y}},:]=\mathbf{W}[{\hat{y}},:] - \alpha \mathbf{x_i}\)<br>
+          		\(\mathbf{b}[{\hat{y}}]=\mathbf{b}[{\hat{y}}] - \alpha\)<br><br>
+
+          		\(\mathbf{W}[{{y}},:]=\mathbf{W}[{{y}},:] + \alpha \mathbf{x_i}\)<br>
+          		\(\mathbf{b}[{y}]= \mathbf{b}[{y}] + \alpha\)<br>
           	</center>
           </p>
 
