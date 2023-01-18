@@ -29,7 +29,7 @@ social: true  # includes social icons at the bottom of the page
 D’Jeff is currently enrolled into a PhD program at the University of Sherbrooke. He is interested in applying Machine 
 learning to solve real-life problems. His current research lies at the intersection of machine  learning and 
 cybersecurity. More specifically, he is  interested in creating  robust machine learning  models for anomaly detection 
-in industrial control systems. 
+for industrial control systems. 
 
 He is a member of the [GRIC](https://gric.recherche.usherbrooke.ca/equipe/djeff-nkashama-kanda/), an interdisciplinary 
 research group working on cybersecurity. He is also a member of [GREPROVAD](https://www.greprovad.org/docs/djeffkanda/) and [Optimall-Lab](https://www.optimall-lab.org/membres.php).
