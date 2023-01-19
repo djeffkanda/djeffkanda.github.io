@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="apple-mobile-web-app-title" content="CS 188">
+  <meta name="application-name" content="CS 188">
+  <meta name="msapplication-TileColor" content="#3b7ea1">
+  <meta name="theme-color" content="#3b7ea1">
+
+  <title>
+    TP2 - IFT615: Introduction à l'intelligence artificielle, Hiver 2023 2022
+  </title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../../assets/css/main.css">
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      CommonHTML: {
+        linebreaks: { automatic: true },
+        scale: 90,
+        preferredFont: "Latin Modern"
+      },
+      "HTML-CSS": {
+        linebreaks: { automatic: true },
+        scale: 90,
+        preferredFont: "Latin Modern"
+      },
+     SVG: {
+       linebreaks: { automatic: true },
+       scale: 90,
+       preferredFont: "Latin Modern"
+     }
+    });
+  </script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+  <style type="text/css">
+    nav.navbar {
+      background-color: #005a20;
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body data-spy="scroll" data-target="#toc">
+  <div id="navscroll">
+    <nav id="navbar" class="navbar navbar-light navbar-expand-lg align-items-center">
+      <div class="container">
+        <a class="navbar-brand" href="../../index.html" style="color: #fff;"><strong>IFT615</strong> | Hiver 2023</a>
+        <button class="navbar-toggler collapsed" type="button" data-toggle="collapse"
+          data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+          aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+      </div>
+    </nav>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" type="text/javascript"></script> 
+  <script src="../../assets/js/parallax.min.js"></script>
+  <script src="../../assets/js/main.min.js"></script>
+
+
+  <div class='container'>
+    <div class="row">
+      <div class="col-sm-3">
+        <nav id="toc" data-toggle="toc" class="sticky-top" style="top: 40px; margin-bottom: 40px">
+          <ul class="nav navbar-nav">
+            <li>
+              <a class="nav-link" href="#introduction">Introduction</a>
+            </li>
+            <li>
+              <a class="nav-link" href="#installation">Installation</a>
+            </li>
+            <li>
+              <a class="nav-link" href="#provided-code">Code fourni</a>
+            </li>
+            <li>
+              <a class="nav-link" href="#neural-network-tips">Astuces pour les réseaux de neurones</a>
+            </li>
+            <li>
+              <a class="nav-link" href="#Q1">Question 1 (10 points) : Régression non-lineaire avec un MLP</a>
+            </li>
+            <li>
+              <a class="nav-link" href="#Q2">Question 2 (10 points) : Identification d'images (Fashion-MNIST) avec un MLP</a>
+            </li>
+            <li>
+              <a class="nav-link" href="#Q3">Question 3 (10 points) : Identification de langues avec un RNN</a>
+            </li>
+            <li>
+              <a class="nav-link" href="#Q4">Question 4 (10 points) : Réseau à convolutions avec PyTorch</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <div class="col-sm-9">
+        <h1 class="mt-1 center" id="project-5-machine-learning">TP 2 : Réseaux de neurones</h1>
+
+        <center>Version 1.0. Dernière mise à jour : 17-01-2023.</center>
+        <center>Remise : <b>9 février 2023</b> à <b>23:59</b></center>
+        <center>Mode de soumission : Turnin TP2</center>
+        <center>Total de points : 50</center>
+        <center>Pondération : 8%</center>
+<!--        <center>Email du correcteur : <a href="mailto:jean-charles.verdier@usherbrooke.ca">jean-charles.verdier@usherbrooke.ca</a></center>-->
+
+        <hr />
+
+        <img src="fashionmnist-demo.png" alt="Visualisation des erreurs de classifications sur Fashion-MNIST" class="img-fluid center-image" style="width: 500px;" />
+
+        <p>Dans ce projet, vous devez monter différents réseaux de neurones pour différentes tâches de classification et de régression.</p>
+        <h2 id="introduction">Introduction</h2>
+
+        <p>Ce projet sert d'introduction aux réseaux de neurones profonds.</p>
+
+        <p>Le code pour ce projet contient les fichiers ci-dessous, disponibles dans un <a
+            href="../../assets/tp/IFT615_TP2.zip">fichier compressé</a>.</p>
+
+        <table class="table table-bordered">
+          <tbody>
+            <tr>
+              <td colspan="2"><b>Fichiers à modifier :</b></td>
+            </tr>
+            <tr>
+              <td><code>models.py</code></td>
+              <td>Contient les réseaux de neurones pour les différentes applications</td>
+            </tr>
+            <tr>
+              <td colspan="2"><b>Fichiers à lire seulement (NE PAS modifier) :</b></td>
+            </tr>
+            <tr>
+              <td><code>nn.py</code></td>
+              <td>Mini-librairie de réseau de neurones</td>
+            </tr>
+            <tr>
+              <td colspan="2"><b>Autres fichiers :</b></td>
+            </tr>
+            <tr>
+              <td><code>autograder.py</code></td>
+              <td>Auto-correcteur du projet</td>
+            </tr>
+            <tr>
+              <td><code>backend.py</code></td>
+              <td>Backend pour différentes tâches</td>
+            </tr>
+            <tr>
+              <td><code>data</code></td>
+              <td>Contient les différentes données d'entraînement</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p><strong>Fichiers à modifier et soumettre :</strong> vous devez remplir les sections manquantes du fichier
+          <code class="highlighter-rouge">models.py</code>. Il faut ne faut pas modifier les autres fichiers.
+        </p>
+
+        <p><strong>Évaluation :</strong> l'auto-correcteur s'assure du bon fonctionnement de votre code.
+          Ne changez aucun nom de fonction ou nom de classe dans le code, sans quoi l'auto-correcteur ne fonctionnera
+          pas.
+          L'auto-correcteur ne détermine pas entièrement votre résultat final. La qualité de votre implémentation - et
+          non les résultats obtenus par l'auto-correcteur - déterminent votre résultat final.
+        </p>
+
+        <p><strong>Utilisation des données :</strong> une partie des notes obtenues dépend de la performance de votre modèle
+          sur l'ensemble de test.
+          La base de code n'offre aucun API permettant d'accéder à cet ensemble directement. Par conséquent, toute
+          tentative de modification des données de test sera considérée comme de la tricherie et sera sévèrement pénalisée en conséquence.
+        </p>
+
+        <p><strong>Aide :</strong> N'hésitez pas d'écrire dans le canal de cours pour poser votre question. </p>
+
+        <hr />
+
+        <h2 id="installation">Installation</h2>
+
+        <p>Pour ce projet, vous devez installer les deux librairies suivantes :</p>
+        <ul>
+          <li><a href="http://www.numpy.org/">numpy</a>, une librairie de calcul matriciel -
+            <a href="https://docs.scipy.org/doc/numpy-1.13.0/user/install.html">installation</a>
+          </li>
+          <li><a href="https://matplotlib.org/">matplotlib</a>, une librairie de visualisation -
+            <a href="https://matplotlib.org/users/installing.html">installation</a>
+          </li>
+          <li>
+            <a href="https://pytorch.org/">PyTorch</a>, un framework de machine learning -
+            <a href="https://pytorch.org/get-started/locally/">installation</a>
+          </li>
+        </ul>
+        <p><strong>Note :</strong> Vous pouvez réutiliser l'environnement du TP1 dans lequel vous avez déjà installé ces
+          dépendances. Il vous manquera seulement l'installation de PyTorch.</p>
+        <p>On rappelle ci-dessous comment installer des librairies à l'aide de conda et pip :</p>
+        <div class="language-shell highlighter-rouge">
+          <div class="highlight">
+            <pre class="highlight"><code>conda activate <span class="nt">[le nom de votre environnement]</span></code></pre>
+          </div>
+        </div>
+
+        <div class="language-shell highlighter-rouge">
+          <div class="highlight">
+            <pre class="highlight"><code>pip install numpy</code></pre>
+          </div>
+        </div>
+
+        <div class="language-shell highlighter-rouge">
+          <div class="highlight">
+            <pre class="highlight"><code>pip install matplotlib</code></pre>
+          </div>
+        </div>
+        <div class="language-shell highlighter-rouge">
+          <div class="highlight">
+            <pre class="highlight"><code>pip install torch</code></pre>
+          </div>
+        </div>
+
+        <p>Contrairement au TP1, vous ne devriez pas utiliser ces librairies directement (a l'exception de PyTorch pour la question 4). Elles sont toutefois
+          nécessaires au fonctionnement de l'auto-correcteur et du backend.</p>
+
+        <p>Pour vérifier l'installation des dépendances, exécutez la commande suivante :</p>
+
+        <div class="language-shell highlighter-rouge">
+          <div class="highlight">
+            <pre class="highlight"><code>python autograder.py <span class="nt">--check-dependencies</span></code></pre>
+          </div>
+        </div>
+
+        <p>Vous devriez alors observer une fenêtre s'ouvrir avec un ligne qui tourne dans un cercle</p>
+        <p><img src="../../assets/images/check_dependencies_spinner.png" alt="Matplotlib straight line graph" class="img-fluid center-image" style="width: 600px;"></p>
+        <hr />
+
+        <h3 id="provided-code">Code fourni</h3>
+
+        <p>Pour ce projet, vous avez accès à une mini-librairie de réseau de neurones (<code
+            class="highlighter-rouge">nn.py</code>) ainsi qu'une collection de base de données (<code
+            class="highlighter-rouge">backend.py</code>).</p>
+
+        <p>La librairie <code class="highlighter-rouge">nn.py</code> définie une collection d'objets node. Chaque node
+          représente un nombre réel ou une matrice de nombres réels. Les opérations sur les objets node sont optimisées
+          et donc plus rapides
+          que les types primitifs de Python (comme les listes par exemple).</p>
+
+        <p>
+          Lorsqu'on entraîne un réseau de neurones, on met à jour les paramètres après avoir effectué des prédictions sur plusieurs données
+          contrairement au perceptron du TP1 où les poids étaient affectés après chaque prédiction. Cette procédure d'entraînement par lot permet
+          ainsi au réseau de mieux se généraliser et de ne pas se sur-spécialiser sur chacune des observations singulières. L'argument $\text{batch_size}$ réfère au nombre
+          d'observations utilisées pour mettre à jour le réseau. Aussi, veuillez noter que le paramètre $\text{num_features}$ dénote le nombre d'attribut
+          ou de variables associées à chaque donnée. 
+        </p>
+
+        <p>Voici une brève description de l'API :</p>
+        <ul>
+          <li>
+            <code class="highlighter-rouge">nn.Constant</code> représente une matrice de nombres réels
+            utilisée pour représenter les données en entrée, la sortie des modèles d'apprentissage, ou les étiquettes.
+          </li>
+          <li>
+            <code class="highlighter-rouge">nn.Parameter</code> représente les paramètres qu'on optimise (par exemple,
+            la matrice W dans le perceptron multi-classe du TP1).
+          </li>
+          <li>
+            <code class="highlighter-rouge">nn.DotProduct</code> calcule le produit scalaire.
+          </li>
+          <li>
+            <code class="highlighter-rouge">nn.as_scalar</code> peut extraire un nombre à virgule flotante d'un node.
+          </li>
+          
+          <li>
+            <code class="highlighter-rouge">nn.Add</code> effectue une addition de matrice.
+            <ul>
+              <li>Utilisation : <code class="highlighter-rouge">nn.Add(x, y)</code> accepte deux node de dimension
+                $\text{batch_size} \times \text{num_features}$ et retourne un node de dimension
+                $\text{batch_size} \times \text{num_features}$.</li>
+            </ul>
+          </li>
+          <li>
+            <code class="highlighter-rouge">nn.AddBias</code> ajoute un vecteur de biais.
+            <ul>
+              <li>Utilisation : <code class="highlighter-rouge">nn.AddBias(features, bias)</code> accepte une matrice
+                <code class="highlighter-rouge">features</code> de dimension \(\text{batch_size} \times
+                \text{num_features}\)
+                et un biais <code class="highlighter-rouge">bias</code>de dimension \(1 \times \text{num_features}\).
+                Retourne un node de dimension \(\text{batch_size} \times \text{num_features}\).</li>
+            </ul>
+          </li>
+          <li>
+            <code class="highlighter-rouge">nn.Linear</code> applique une transformation linéaire (multiplication de matrice) sur les arguments en entrée.
+            <ul>
+              <li>Utilisation : <code class="highlighter-rouge">nn.Linear(features, weights)</code> accepte <code
+                  class="highlighter-rouge">features</code> de dimension \(\text{batch_size} \times
+                \text{num_input_features}\) et <code class="highlighter-rouge">weights</code>de dimension
+                \(\text{num_input_features} \times \text{num_output_features}\), et retourne un node de dimension
+                \(\text{batch_size} \times \text{num_output_features}\).</li>
+            </ul>
+          </li>
+          <li>
+            <code class="highlighter-rouge">nn.ReLU</code> applique la fonction Rectified Linear Unit
+            \(relu(x) = \max(x, 0)\) sur chaque élément de l'argument en entrée.
+            <ul>
+              <li>Utilisation : <code class="highlighter-rouge">nn.ReLU(features)</code>, retourne un node avec la même
+                dimension
+                que l'argument en entrée.</li>
+            </ul>
+          </li>
+          <li>
+            <code class="highlighter-rouge">nn.SquareLoss</code> calcule une perte quadratique sur un batch (utilisée
+            pour la régression).
+            <ul>
+              <li>Utilisation : <code class="highlighter-rouge">nn.SquareLoss(a, b)</code>, où <code
+                  class="highlighter-rouge">a</code> et <code class="highlighter-rouge">b</code> ont comme dimension
+                \(\text{batch_size} \times \text{num_outputs}\).</li>
+            </ul>
+          </li>
+          <li>
+            <code class="highlighter-rouge">nn.SoftmaxLoss</code> calcule la fonction softmax sur un batch (utilisée
+            pour les problèmes de classification).
+            <ul>
+              <li>Utilisation : <code class="highlighter-rouge">nn.SoftmaxLoss(logits, labels)</code>, où <code
+                  class="highlighter-rouge">logits</code> et <code class="highlighter-rouge">labels</code> ont comme
+                dimension
+                \(\text{batch_size} \times \text{num_classes}\). Le terme “logits” refère aux scores produits par un
+                modèle.
+                Les étiquettes "labels" doivent être non-négatives.
+              </li>
+            </ul>
+          </li>
+          <li><code class="highlighter-rouge">nn.gradients</code> calcule le gradient d'une perte par rapport aux
+            paramètres passés comme arguments.
+            <ul>
+              <li>
+                Utilisation : <code
+                  class="highlighter-rouge">nn.gradients(loss, [parameter_1, parameter_2, ..., parameter_n])</code>
+                retourne une liste <code class="highlighter-rouge">[gradient_1, gradient_2, ..., gradient_n]</code>, où
+                chaque élément est un <code class="highlighter-rouge">nn.Constant</code> contenant le gradient de la
+                perte par rapport à un paramètre.
+              </li>
+            </ul>
+          </li>
+          <li><code class="highlighter-rouge">nn.as_scalar</code> converti un node en type primitif Python pouvant s'avérer utile comme
+            critère d'arrêt lors de l'apprentissage.
+            <ul>
+              <li>
+                Utilisation : <code class="highlighter-rouge">nn.as_scalar(node)</code>, où <code
+                  class="highlighter-rouge">node</code> est soit un node de perte ou possède la forme <code
+                  class="highlighter-rouge">(1,1)</code>.
+              </li>
+            </ul>
+          </li>
+        </ul>
+
+        <p>Additionnellement, les instances de <code class="highlighter-rouge">datasets</code> possèdent les deux
+          méthodes suivantes :</p>
+
+        <ul>
+          <li>
+            <code class="highlighter-rouge">dataset.iterate_forever(batch_size)</code> génère une suite infinie de batch
+            pour un exemple.
+          </li>
+          <li>
+            <code class="highlighter-rouge">dataset.get_validation_accuracy()</code> retourne la métrique de justesse
+            ("accuracy") de votre modèle sur l'ensemble de validation. Cette métrique peut aussi être utile comme critère d'arrêt lors de l'apprentissage.
+          </li>
+        </ul>
+
+        <hr />
+
+        <h3 id="example-linear-regression">Exemple : Régression linéaire avec le Perceptron</h3>
+
+        <p>
+          À titre d'exemple, essayons de trouver les paramètres d'une équation linéaire permettant de prédire les
+          valeurs de \(\mathbf{Y}\).
+          On commence par \(|\mathbf{Y}| = 4\). L'équation optimale obtenue devrait être \( y = 7x_0 + 8x_1 + 3 \)
+          (pour vous en convaincre, vous pouvez effectuer les calculs et remarquer la différence entre la prédiction et
+          la valeur réelle).
+          Autrement dit, à partir d'une matrice de données \(\mathbf{X}\), on essaie de trouver les paramètres \(m_0\),
+          \(m_1\) et \(b\) qui permettent de prédire
+          fidèlement chaque \(y \in \mathbf{Y}\).
+        </p>
+        <p>
+          <script type="math/tex">% <![CDATA[
+\mathbf{X} = \begin{bmatrix}
+    0 & 0 \\ 0 & 1 \\ 1 & 0 \\ 1 & 1
+\end{bmatrix} \quad %]]></script> and
+          <script type="math/tex">\quad  \mathbf{Y} = \begin{bmatrix}
+    3 \\ 11 \\ 10 \\ 18
+\end{bmatrix}</script>
+        </p>
+
+        <p>Supposons que les données sont fournies en node <code class="highlighter-rouge">nn.Constant</code> :
+        </p>
+
+        <div class="language-python highlighter-rouge">
+          <div class="highlight">
+            <pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">x</span>
+<span class="o">&lt;</span><span class="n">Constant</span> <span class="n">shape</span><span class="o">=</span><span class="mi">4</span><span class="n">x2</span> <span class="n">at</span> <span class="mh">0x10a30fe80</span><span class="o">&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">y</span>
+<span class="o">&lt;</span><span class="n">Constant</span> <span class="n">shape</span><span class="o">=</span><span class="mi">4</span><span class="n">x1</span> <span class="n">at</span> <span class="mh">0x10a30fef0</span><span class="o">&gt;</span>
+</code></pre>
+          </div>
+        </div>
+
+        <p>Nous entraînons un modèle de la forme \( f(x) = x_0 \cdot m_0 + x_1 \cdot m_1 +b \).</p>
+
+        <p>D'abord, on crée nos paramètres optimisables. Sous forme de matrice, ils sont de la forme suivante:</p>
+
+        <p>
+          <script type="math/tex">\mathbf{M} = \left[ \begin{array}{c} m_0 \\ m_1 \end{array}\right] \quad</script> et
+          <script type="math/tex">\quad\mathbf{B} = \left[ \begin{array}{c} b \end{array}\right]</script>
+        </p>
+
+        <p>Ces formules se traduisent en code comme suit :</p>
+        <div class="language-python highlighter-rouge">
+          <div class="highlight">
+            <pre class="highlight"><code><span class="n">m</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</code></pre>
+          </div>
+        </div>
+        <p>Leur interprétation en chaîne de caractères devrait donner :</p>
+        <div class="language-python highlighter-rouge">
+          <div class="highlight">
+            <pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">m</span>
+<span class="o">&lt;</span><span class="n">Parameter</span> <span class="n">shape</span><span class="o">=</span><span class="mi">2</span><span class="n">x1</span> <span class="n">at</span> <span class="mh">0x112b8b208</span><span class="o">&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span>
+<span class="o">&lt;</span><span class="n">Parameter</span> <span class="n">shape</span><span class="o">=</span><span class="mi">1</span><span class="n">x1</span> <span class="n">at</span> <span class="mh">0x112b8beb8</span><span class="o">&gt;</span>
+</code></pre>
+          </div>
+        </div>
+        <p>Ensuite, on calcule une prédiction de notre modèle pour un y :</p>
+
+        <div class="language-python highlighter-rouge">
+          <div class="highlight">
+            <pre class="highlight"><code><span class="n">xm</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+<span class="n">y_hat</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">AddBias</span><span class="p">(</span><span class="n">xm</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</code></pre>
+          </div>
+        </div>
+
+        <p>
+          Le but est que notre prédiction soit exacte, c'est-à-dire \(\hat{y} = y\). En régression linéaire, une telle
+          tâche est réalisée en minimisant la somme des différences au carré :
+          \( \mathcal{L} = \frac{1}{2N} \sum_{(x, y)} (y - f(x))^2 \).
+        </p>
+
+        <p>On construit donc un node de type loss :</p>
+
+        <div class="language-python highlighter-rouge">
+          <div class="highlight">
+            <pre class="highlight"><code><span class="n">loss</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">SquareLoss</span><span class="p">(</span><span class="n">y_hat</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</code></pre>
+          </div>
+        </div>
+
+        <p>
+          La base de code permet le gradient de la perte en fonction des paramètres :
+        </p>
+
+        <div class="language-python highlighter-rouge">
+          <div class="highlight">
+            <pre class="highlight"><code><span class="n">grad_wrt_m</span><span class="p">,</span> <span class="n">grad_wrt_b</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">gradients</span><span class="p">(</span><span class="n">loss</span><span class="p">,</span> <span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="n">b</span><span class="p">])</span>
+</code></pre>
+          </div>
+        </div>
+        <p>L'impression des gradients devrait donner :</p>
+        <div class="language-python highlighter-rouge">
+          <div class="highlight">
+            <pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">xm</span>
+<span class="o">&lt;</span><span class="n">Linear</span> <span class="n">shape</span><span class="o">=</span><span class="mi">4</span><span class="n">x1</span> <span class="n">at</span> <span class="mh">0x11a869588</span><span class="o">&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">y_hat</span>
+<span class="o">&lt;</span><span class="n">AddBias</span> <span class="n">shape</span><span class="o">=</span><span class="mi">4</span><span class="n">x1</span> <span class="n">at</span> <span class="mh">0x11c23aa90</span><span class="o">&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">loss</span>
+<span class="o">&lt;</span><span class="n">SquareLoss</span> <span class="n">shape</span><span class="o">=</span><span class="p">()</span> <span class="n">at</span> <span class="mh">0x11c23a240</span><span class="o">&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">grad_wrt_m</span>
+<span class="o">&lt;</span><span class="n">Constant</span> <span class="n">shape</span><span class="o">=</span><span class="mi">2</span><span class="n">x1</span> <span class="n">at</span> <span class="mh">0x11a8cb160</span><span class="o">&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">grad_wrt_b</span>
+<span class="o">&lt;</span><span class="n">Constant</span> <span class="n">shape</span><span class="o">=</span><span class="mi">1</span><span class="n">x1</span> <span class="n">at</span> <span class="mh">0x11a8cb588</span><span class="o">&gt;</span>
+</code></pre>
+          </div>
+        </div>
+        <p>
+          On utilise la méthode <code class="highlighter-rouge">update</code> afin de mettre en jour les paramètres.
+          Voici un exemple de mise à jour de <code class="highlighter-rouge">m</code> (on assume qu'une variable <code
+            class="highlighter-rouge">multiplier</code> a été initialisée avec un taux d'apprentissage adéquat) :
+        </p>
+        <div class="language-python highlighter-rouge">
+          <div class="highlight">
+            <pre class="highlight"><code><span class="n">m</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">grad_wrt_m</span><span class="p">,</span> <span class="n">multiplier</span><span class="p">)</span>
+</code></pre>
+          </div>
+        </div>
+        <p>
+          Si on inclut la mise à jour de <code class="highlighter-rouge">b</code> et qu'on répète les opérations
+          précédentes
+          dans une structure itérative, on retrouve une procédure complète de régression linéaire.
+        </p>
+
+        <hr/>
+
+        <p>Lors de l'entraînement du réseau, vous recevez une instance de <code class="highlighter-rouge">dataset</code>
+          pour laquelle vous retrouvez les batch d'entraînement en appelant <code
+            class="highlighter-rouge">dataset.iterate_once(batch_size)</code> :</p>
+
+        <div class="language-python highlighter-rouge">
+          <div class="highlight">
+            <pre class="highlight"><code><span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">dataset</span><span class="o">.</span><span class="n">iterate_once</span><span class="p">(</span><span class="n">batch_size</span><span class="p">):</span>
+<span class="o">...</span>
+</code></pre>
+          </div>
+        </div>
+
+        <p>L'exemple suivant extrait un batch size de 1 (c-à-d, un seul exemple d'entraînement) :</p>
+
+        <div class="language-python highlighter-rouge">
+          <div class="highlight">
+            <pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">dataset</span><span class="o">.</span><span class="n">iterate_once</span><span class="p">(</span><span class="n">batch_size</span><span class="p">):</span>
+<span class="o">...</span>     <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="o">...</span>     <span class="k">print</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="o">...</span>     <span class="k">break</span>
+<span class="o">...</span>
+<span class="o">&lt;</span><span class="n">Constant</span> <span class="n">shape</span><span class="o">=</span><span class="mi">1</span><span class="n">x3</span> <span class="n">at</span> <span class="mh">0x11a8856a0</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">Constant</span> <span class="n">shape</span><span class="o">=</span><span class="mi">1</span><span class="n">x1</span> <span class="n">at</span> <span class="mh">0x11a89efd0</span><span class="o">&gt;</span>
+</code></pre>
+          </div>
+        </div>
+
+        <p>Les données d'entrées <code class="highlighter-rouge">x</code> et les étiquettes associées <code
+            class="highlighter-rouge">y</code> sont données sur la forme de node de type <code
+            class="highlighter-rouge">nn.Constant</code>. Le format de <code class="highlighter-rouge">x</code>
+          est <code class="highlighter-rouge">(batch_size, num_features)</code>, et le format de <code
+            class="highlighter-rouge">y</code> est <code class="highlighter-rouge">(batch_size, num_outputs)</code>.
+          Voici un exemple de produit scalaire de <code class="highlighter-rouge">x</code> avec lui-même représenté
+          d'abord en tant que node et ensuite en tant que type primitif Python.</p>
+        <div class="language-python highlighter-rouge">
+          <div class="highlight">
+            <pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">nn</span><span class="o">.</span><span class="n">DotProduct</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="o">&lt;</span><span class="n">DotProduct</span> <span class="n">shape</span><span class="o">=</span><span class="mi">1</span><span class="n">x1</span> <span class="n">at</span> <span class="mh">0x11a89edd8</span><span class="o">&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">nn</span><span class="o">.</span><span class="n">as_scalar</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">DotProduct</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
+<span class="mf">1.9756581717465536</span>
+</code></pre>
+          </div>
+        </div>
+        <hr />
+
+        <h3 id="neural-network-tips">Astuces pour les réseaux de neurones</h3>
+
+        <p>Dans le projet, vous devrez implémenter les modèles suivants :</p>
+
+        <ul>
+          <li><a href="#Q1">Q1 : Régression non linéaire avec un MLP</a></li>
+          <li><a href="#Q2">Q2 : Reconnaissance d'images de Fashion-MNIST avec un MLP</a></li>
+          <li><a href="#Q3">Q3 : Identification automatique de langues avec un RNN</a></li>
+          <li><a href="#Q4">Q4 : Reconnaissance d'images un CNN implémenté avec PyTorch</a></li>
+        </ul>
+
+        <h4 id="building-neural-nets">Implémenter un réseau de neurones</h4>
+
+        <p>Votre implémentation du réseau de neurones passe par <code class="highlighter-rouge">nn.py</code>.
+          Comme nous avons vu dans le cours, un réseau de neurones de base possède une ou plusieurs couches qui effectuent toutes une opération linéaire (comme le
+          perceptron).
+          Les couches sont séparées par une <em>fonction d'activation non-linéaire</em> qui permet au réseau de modéliser des fonctions complexes.
+          Nous utiliserons la fonction ReLU comme fonction d'activation. Celle-ci est définie comme \(relu(x) = \max(x,
+          0)\). Par exemple, la sortie \(\mathbf{f}(\mathbf{x})\) d'un réseau simple à deux couches
+          pour une donnée \(\mathbf{x}\) est donnée par:
+          \[\mathbf{f}(\mathbf{x}) = relu(\mathbf{x} \cdot \mathbf{W_1} + \mathbf{b_1}) \cdot \mathbf{W_2} +
+          \mathbf{b}_2 \]
+          Ce réseau optimise les paramètres \(\mathbf{W_1}\), \(\mathbf{W_2}\), \(\mathbf{b}_1\)
+          et \(\mathbf{b}_2\) par la descente de gradient stochastique. \(\mathbf{W_1}\) est une matrice de format \(i \times h\),
+          où \(i\) et \(h\) correspondent respectivement au nombre de lignes du vecteur \(\mathbf{x}\) et la taille
+          de la <em>couche cachée</em>.
+          \(\mathbf{b_1}\) est un vecteur de dimension \(h\). Le choix de \(h\) est laissé à la discrétion du programmeur
+          ou de la programmeuse. Vous devez toutefois vous assurer que les dimensions entre les couches soient
+          adéquates sans quoi le produit scalaire ne fonctionnera pas ou retournera une matrice de dimension absurde.
+          L'utilisation d'un grand \(h\) permet généralement un plus grand pouvoir représentational du modèle,
+          mais ajoute plus de paramètres à optimiser en plus de dégénérer vers un modèle qui se généralise mal sur des
+          données nouvelles (sur-apprentissage).
+        </p>
+
+        <p>On peut créer des réseaux plus profonds en ajoutant des couches. Par exemple, pour un réseau à trois couches,
+          on a :
+          \[ \mathbf{f}(\mathbf{x}) = relu(relu(\mathbf{x} \cdot \mathbf{W_1} + \mathbf{b_1}) \cdot \mathbf{W_2} +
+          \mathbf{b}_2) \cdot \mathbf{W_3} + \mathbf{b_3} \]</p>
+
+          <h4 id="note-on-batching">Note sur les batch</h4>
+
+        <p>Contrairement au perceptron, où vous optimisiez les paramètres <em>après chaque exemple d'entraînement</em>,
+          vous devez maintenant optimiser le réseau en <em>batch</em>, c'est-à-dire en prenant plusieurs exemples
+          d'entraînement au-lieu d'un seul. Formellement, au-lieu de mettre à jour les poids après chaque entrée \(x\) de taille <em>D</em>, vous devez considérer 
+          un ensemble de <em>N</em> d'entrées représenté comme une matrice \(X\) de dimension \(N \times D\).
+        </p>
+
+        <h4 id="note-on-randomness">Note sur l'initilisation des paramètres</h4>
+
+        <p>Au premier TP, nous initialisions les paramètres par des valeurs nulles, ce qui est généralement déconseillé.
+          En pratique, les paramètres du réseau de neurones sont initialisés pseudo-aléatoirement.
+          En conséquent, vous pouvez être malchanceux et échouer certaines tâches de classification avec une très bonne
+          architecture (problème des minima locaux). Cependant, ce résultat est plutôt rare dans notre contexte.
+          Donc, une série de résultats négatifs avec l'auto-correcteur devrait être un indicateur que votre modèle n'est
+          pas bien implémenté ou que vous devriez explorer d'autres architectures.
+        </p>
+
+        <h4 id="practical-tips">Astuces</h4>
+
+        <p>Voici quelques astuces pour vous aider dans l'élaboration des réseaux de neurones :</p>
+
+        <ul>
+          <li>
+            Soyez systématique et conservez une trace de chaque architecture essayée avec leurs hyper-paramètres
+            (taille des couches, taux d'apprentissage, etc.) respectifs, ainsi que les résultats obtenus.
+          </li>
+          <li>
+            Les réseaux profonds dépendent d'une multitude de paramètres et une mauvaise combinaison de ceux-ci
+            peut nuire à leur performance. Commencez donc par un réseau simple (seulement deux couches et une seule
+            activation) afin de déterminer un bon taux d'apprentissage
+            et un bon nombre de neurones pour la couche cachée. Vous pouvez ensuite complexifier avec plus de couches
+            ayant des dimensions similaires.
+          </li>
+          <li>
+            Votre taux d'apprentissage est l'hyper-paramètre le plus déterminant. S'il est mauvais, le choix des
+            autres hyper-paramètres importera peu.
+            Vous pouvez utiliser la meilleure architecture connue et modifier le taux d'apprentissage de telle sorte
+            que ses performances deviennent gênantes.
+            Un taux trop lent produit un modèle qui converge très lentement; par contraste, un taux trop rapide ne
+            convergera probablement jamais.
+            Commencez en essayant différents taux et observez la courbe d'apprentissage, c'est-à-dire comment la perte
+            évolue après chaque itération.
+            Si votre perte augmente, c'est signe que votre taux d'apprentissage est trop élevé.
+          </li>
+          <li>
+            Des tailles de batch plus petites demandent des taux d'apprentissage petits.
+          </li>
+          <li>
+            Vos couches cachées ne devraient pas avoir trop de neurones sans quoi la précision du réseau diminuera,
+            mais le temps d'entraînement augmentera. L'auto-correcteur devrait demander au plus entre 2 et 12 minutes.
+          </li>
+          <li>
+            Si votre modèle retourne des valeurs abbérantes comme Infinity ou NaN, votre taux d'apprentissage est
+            probablement trop élevé.</li>
+          <li>
+            <p>Valeurs recommandées pour les hyper-paramètres :</p>
+            <ul>
+              <li>dimension des couches cachées : entre 10 et 400;</li>
+              <li>dimension des batch : entre 1 et la taille des données;</li>
+              <li>taux d'apprentissage : entre 0.001 et 1.0;</li>
+              <li>nombre de couches cachées : entre 1 et 3.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <hr />
+
+        <!-- QUESTION 1 -->
+        <div id="Q1">
+          <h2 id="question-1">Question 1 (10 points) : Régression non-lineaire avec un MLP</h2>
+          <p>Pour cette question, vous entrainerez un réseau de neurones afin d'approximer la fonction \(\frac{x\text{cos}(x)}{4}\) sur
+            l'intervalle \([-2\pi,2\pi]\)</p>
+          <p>Vous devrez compléter l'implémentation de la classe <code class="highlighter-rouge">RegressionModel</code> dans
+            <code class="highlighter-rouge">models.py</code>. Pour ce problème, une architecture relativement simple devrait suffir
+            (voir <a href="">Astuces pour les réseaux de neurones</a>). Utilisez <code class="highlighter-rouge">nn.SquareLoss</code> comme perte.</p>
+          <p>Tâches :</p>
+          <ul>
+            <li>Implémenter <code class="highlighter-rouge">RegressionModel.__init__</code> avec toute initialization nécessaire;</li>
+            <li>Implémenter <code class="highlighter-rouge">RegressionModel.run</code> pour renvoyer un noeud $\text{batch_size} \times 1$ qui
+              représente les predictions de votre modèle;</li>
+            <li>Implémenter <code class="highlighter-rouge">RegressionModel.get_loss</code> qui retourne la perte pour les entrées et les cibles données;</li>
+            <li>Implémenter <code class="highlighter-rouge">RegressionModel.train</code>, qui doit entrainer votre modèle en utilisant des
+              mise-à-jours basées sur les gradients.</li>
+          </ul>
+          <p>Il n'y a qu'un seul jeu de données pour cette tâche (pas de validation ni de test car les données peuvent etre générées à la volée).
+            Votre implémentation doit obtenir une perte inférieure ou égale à 0.02 pour avoir tous les points. Vous pouvez utiliser la perte sur
+            l'ensemble d'entrainement pour déterminer quand vous arrêter (utilisez <code class="highlighter-rouge">nn.as_scalar</code> pour convertir
+            un loss node en un nombre Python). Notez que le modèle peut prendre plusieurs minutes à être entrainé.</p>
+          <p>Pour tester votre implémentation, utilisez l'auto-correcteur comme suit :</p>
+          <div class="language-shell highlighter-rouge">
+            <div class="highlight">
+              <pre class="highlight"><code>python autograder.py <span class="nt">-q</span> q1</code></pre>
+            </div>
+          </div>
+
+          <h4>Barème</h4>
+          <table class="table table-bordered">
+            <tbody>
+              <tr>
+                <td><b>Critère</b></td><td><b>Points</b></td>
+              </tr>
+              <tr>
+                <td>Code fonctionnel</td><td>3</td>
+              </tr>
+              <tr>
+                <td>Perte sur le jeu de test <= 0.02</td><td>5</td>
+              </tr>
+              <tr>
+                <td>Qualité / lisibilité du code</td><td>1</td>
+              </tr>
+              <tr>
+                <td>Pas de boucles <code class="highlighter-rouge">for</code> inutiles (code vectorisé)</td><td>1</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td><b>Total</b></td><td><b>10</b></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <hr />
+
+        <!-- QUESTION 2 -->
+        <div id="Q2">
+          <h2 id="question-2">Question 2 (10 points) : Identification d'images (Fashion-MNIST) avec un MLP</h2>
+          <p>Pour cette question, vous allez entrainer un réseau pour classifier des articles de mode du jeu de données <a href="https://github.com/zalandoresearch/fashion-mnist" alt="Plus d'informations sur Fashion-MNIST" >Fashion-MNIST</a> qui contient 60,000 exemples d'entraînement et 10,000 exemples de test.</p>
+          <p>Chaque image est de taille $28 \times 28$ pixels, representée par un vecteur réel de dimension $784$. Chaque cible fournie est un vecteur de dimension $10$ avec des zéros pour toutes les valeurs à l'exception d'un $1$ à la position de la classe correcte (<a href="https://fr.wikipedia.org/wiki/Encodage_one-hot" >One-Hot Encoding</a>).</p>
+          <p>Complétez l'implémentation de la classe <code class="highlighter-rouge">FashionClassificationModel</code> dans <code class="highlighter-rouge">models.py</code>. <code class="highlighter-rouge">FashionClassificationModel.run()</code> devrait retourner un node $\text{batch_size} \times 10$ contenant des scores, où un score plus élevé indique une plus grande probabilité qu'un article appartienne à une classe particulière. Vous devez utiliser <code class="highlighter-rouge">nn.SoftmaxLoss</code> pour la perte. N'utilisez pas de fonction d'activation (ReLU) sur la dernière couche de votre réseau.</p>
+          <p>Pour cette question et la question 3, en plus des données d'entrainement, il y a aussi des jeux de données de validation et de test. Vous pouvez utiliser <code class="highlighter-rouge">dataset.get_validation_accuracy()</code> pour calculer la précision de votre modèle sur le jeu de données de validation, ce qui peut être utile pour décider quand arrêter l'entrainement. Le jeu de données de test sera utilisé par l'auto-correcteur.</p>
+          <p>Pour recevoir les points sur cette question, votre modèle doit atteindre une précision de 80% (ou plus) sur le jeu de test. Notez que l'auto-correcteur vous note sur la précision sur le jeu de test. Ainsi, même si votre modèle atteint 80% de précision sur le jeu de validation, il peut obtenir moins sur le jeu de test. Il peut donc être utile d'arrêter l'entrainement au dela de 80% (81, 82%).</p>
+          <p>Tâches :</p>
+          <ul>
+            <li>Implémenter <code class="highlighter-rouge">FashionClassificationModel.__init__</code> avec toute initialization nécessaire;</li>
+            <li>Implémenter <code class="highlighter-rouge">FashionClassificationModel.run</code> pour renvoyer un noeud $\text{batch_size} \times 10$ qui
+              représente les predictions de votre modèle;</li>
+            <li>Implémenter <code class="highlighter-rouge">FashionClassificationModel.get_loss</code> qui retourne la perte pour les entrées et les cibles données;</li>
+            <li>Implémenter <code class="highlighter-rouge">FashionClassificationModel.train</code>, qui doit entrainer votre modèle en utilisant des
+              mise-à-jours basées sur les gradients.</li>
+          </ul>
+
+          <p>Pour tester votre implémentation, utilisez l'auto-correcteur comme suit :</p>
+          <div class="language-shell highlighter-rouge">
+            <div class="highlight">
+              <pre class="highlight"><code>python autograder.py <span class="nt">-q</span> q2</code></pre>
+            </div>
+          </div>
+
+          <p>À titre de référence voici à quoi correspondent les labels :</p>
+          <table class="table table-bordered">
+            <tbody>
+              <tr>
+                <td><b>Label</b></td><td><b>Article</b></td>
+              </tr>
+              <tr>
+                <td>0</td><td>T-shirt/top</td>
+              </tr>
+              <tr>
+                <td>1</td><td>Trouser</td>
+              </tr>
+              <tr>
+                <td>2</td><td>Pullover</td>
+              </tr>
+              <tr>
+                <td>3</td><td>Dress</td>
+              </tr>
+              <tr>
+                <td>4</td><td>Coat</td>
+              </tr>
+              <tr>
+                <td>5</td><td>Sandal</td>
+              </tr>
+              <tr>
+                <td>6</td><td>Shirt</td>
+              </tr>
+              <tr>
+                <td>7</td><td>Sneaker</td>
+              </tr>
+              <tr>
+                <td>8</td><td>Bag</td>
+              </tr>
+              <tr>
+                <td>9</td><td>Ankle boot</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4>Barème</h4>
+          <table class="table table-bordered">
+            <tbody>
+              <tr>
+                <td><b>Critère</b></td><td><b>Points</b></td>
+              </tr>
+              <tr>
+                <td>Code fonctionnel</td><td>3</td>
+              </tr>
+              <tr>
+                <td>Précision sur le jeu de test >= 80%</td><td>5</td>
+              </tr>
+              <tr>
+                <td>Qualité / lisibilité du code</td><td>1</td>
+              </tr>
+              <tr>
+                <td>Pas de boucles <code class="highlighter-rouge">for</code> inutiles (code vectorisé)</td><td>1</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td><b>Total</b></td><td><b>10</b></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <hr />
+
+        <!-- QUESTION 3 -->
+        <div id="Q3">
+          <h2 id="question-3">Question 3 (10 points) : Identification de langues avec un RNN</h2>
+          <p>L'identification de langues consiste à identifier, étant donné un texte, quelle est la langue utilisée. Par exemple, votre navigateur web peut être capable de détecter que vous consultez une page dans une langue étrangère et vous proposer de la traduire automatiquement pour vous.
+            Google Chrome, par exemple, utilise un réseau de neurones pour implémenter cette fonctionnalité.
+          </p>
+          <img src="chrometrans.png" alt="Une capture d'écran de Google Chrome montrant le navigateur offrant une traduction d'une page web" class="img-fluid center-image" style="width: 500px;"  />
+          <p>Dans ce projet, vous allez construire un réseau de neurones qui identifie la langue un mot à la fois. Le jeu de données est composé de mots en 5 langues, par exemple :</p>
+          <table class="table table-bordered">
+            <tbody>
+              <tr>
+                <td><b>Mot</b></td><td><b>Langue</b></td>
+              </tr>
+              <tr>
+                <td>discussed</td><td>Anglais</td>
+              </tr>
+              <tr>
+                <td>eternidad</td><td>Espagnol</td>
+              </tr>
+              <tr>
+                <td>itseänne</td><td>Finlandais</td>
+              </tr>
+              <tr>
+                <td>paleis</td><td>Néerlandais </td>
+              </tr>
+              <tr>
+                <td>mieszkać</td><td>Polonais</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>Chaque mot pouvant avoir un nombre de lettres différent, votre modèle nécessite une architecture qui peut manipuler des entrées à longueur variable.
+            Au lieu d'une seule entrée $x$ (comme dans les questions précédentes), vous aurez une entrée pour chaque lettre : $x_0, x_1, ..., x_{L - 1}$ ou $L$ est la longueur du mot.
+            Vous commencerez par appliquer un réseau $f_{\text{initial}}$ qui ressemble aux réseaux feed-forward des questions précédentes. Ce réseau accepte une entrée $x_0$ et calcule
+            un vecteur de sortie $h_1$ de dimension $d$ :
+            \[ h_1 = f_{\text{initial}}(x_0) \]
+
+            Ensuite, vous allez combiner la sortie de cette première étape avec la prochaine lettre du mot, générant un vecteur resumant les deux premières lettres. Pour cela,
+            vous allez appliquer un sous-réseau qui va accepter en entrée une lettre et retourne un état caché, mais qui depend aussi du précédent état caché $h_1$. On note ce sous-réseau $f$.
+            \[ h_2 = f(h_1, x_1) \]
+
+            Ce schema continue pour toutes les lettres dans le mot. L'état caché à chaque étape résume toutes les lettres que le réseau a vu jusqu'à présent :
+            \[
+              h_1 = f_{\text{initial}}(x_0)\\
+              h_2 = f(h_1, x_1)\\
+              h_3 = f(h_2, x_2)\\
+              \vdots
+            \]
+
+            Tout au long de ces calculs, la fonction $f(\cdot,\cdot)$ est le meme morceau du réseau de neurones et utilise les mêmes paramètres d'entrainement; $f_{\text{initial}}$ va aussi partager certains des paramètres de $f(\cdot,\cdot)$.
+            De cette manière, les paramètres utilisés pour traiter les mots de taille différente seront partagés. Vous pouvez implémenter cela en utilisant une boucle <code class="highlighter-rouge">for</code> sur les entrées <code class="highlighter-rouge">xs</code>, 
+            où chaque itération de la boucle calcule soit $f_{\text{initial}}$ soit $f$.
+          </p>
+          <p>La technique que nous venons de voir s'appelle un réseau de neurones récurrent (RNN). Voici un diagramme d'un RNN :</p>
+          <img src="rnn.png" class="img-fluid center-image" style="width: 500px;"  />
+          <p>Ici, un RNN est utilisé pour encoder le mot "cat" en un vecteur de taille fixe $h_3$.</p>
+          <p>Après que le RNN a traité la longueur totale de l'entrée, le RNN a <i>encodé</i> le mot en entrée (qui est de taille <b>variable</b>) en un vecteur de taille <b>fixe</b> $h_L$, où L est la longueur du mot.
+            Ce "résumé vectoriel" du mot en entrée peut maintenant être passé en entrée de couches additionnelles pour énérer des scores de classification, afin de classifier le mot selon sa langue.
+          </p>
+          <h4>Note sur les batchs</h4>
+          <p>Bien que les équations précédentes sont exprimées pour un mot, en pratique vous devez utiliser des batchs, pour des questions de performance.
+            Par simplicité, le code du projet garanti que tous les mots dans un même batch ont la même taille. Sous forme de batchs donc, un état caché $h_i$ est remplacé par une matrice $H_i$ de dimension $\text{batch_size} \times D$.
+          </p>
+          <h4>Astuces pour le design du RNN</h4>
+          <p>La principale difficulté de cette question est le design de la fonction récurrente $f(h,x)$. Voici quelques conseils :</p>
+          <ul>
+            <li>Commencez avec une architecture feed-forward de votre choix pour $f_{\text{initial}}(x)$, tant qu'elle contient au moins une non-linéarité;</li>
+            <li>Vous devriez utiliser la méthode suivante pour construire $f(h,x)$ étant donné $f_{\text{initial}}(x)$. La première couche de $f_{\text{initial}}(x)$ doit commencer par multiplier le vecteur $x_0$ par une matrice de poids $W$ pour produire $z_0 = x_0 \cdot W$. Pour les
+              lettres suivantes, vous devrez remplacer ce calcul par $z_i = x_i \cdot W + h_i \cdot W_{\text{hidden}}$ en utilisant une opération <code class="highlighter-rouge">nn.Add</code>. Autrement dit, vous devriez remplacer un calcul de la forme
+              <code class="highlighter-rouge">z = nn.Linear(x, W)</code> par un calcul de la forme <code class="highlighter-rouge">z = nn.Add(nn.Linear(x, W), nn.Linear(h, W_hidden))</code>;
+            </li>
+            <li>Si fait correctement, la fonction $f$ sera non-linéaire vis-à-vis de $x$ et $h$;</li>
+            <li>La dimension $D$ du vecteur d'état caché $h$ doit être suffisamment grande;</li>
+            <li>Commencez par un réseau simple pour $f$, puis cherchez de bonnes valeurs pour la dimension de $h$ et le taux d'apprentissage avant de rendre le réseau plus profond. Si vous commencez directement avec un réseau profond, vous aurez un plus grand nombre de combinaisons d'hyperparamètres à tester et mal définir un hyperparamètre peut nuire gravement à la performance de votre modèle.</li>
+          </ul>
+          <p><b>Avertissement :</b> Le jeu de données utilisé a été généré automatiquement. Il peut contenir des erreurs, un language inapproprié ou offensant. Si vous trouvez des instances de mots de ce type, veuillez les rapporter aux correcteurs/instructeurs.
+          </p>
+          <p>Tâches :</p>
+          <ul>
+            <li>Implémenter <code class="highlighter-rouge">LanguageIDModel.__init__</code> avec toute initialization nécessaire;</li>
+            <li>Implémenter <code class="highlighter-rouge">LanguageIDModel.run</code> pour renvoyer un noeud $\text{batch_size} \times 5$ qui
+              représente les predictions de votre modèle;</li>
+            <li>Implémenter <code class="highlighter-rouge">LanguageIDModel.get_loss</code> qui retourne la perte pour les entrées et les cibles données;</li>
+            <li>Implémenter <code class="highlighter-rouge">LanguageIDModel.train</code>, qui doit entrainer votre modèle en utilisant des
+              mise-à-jours basées sur les gradients.</li>
+          </ul>
+          <p>Pour recevoir tous les points, votre architecture doit être capable d'atteindre une précision d'au moins 81% sur le jeu de test.</p>
+
+          <p>Pour tester votre implémentation, utilisez l'auto-correcteur comme suit :</p>
+          <div class="language-shell highlighter-rouge">
+            <div class="highlight">
+              <pre class="highlight"><code>python autograder.py <span class="nt">-q</span> q3</code></pre>
+            </div>
+          </div>
+
+          <h4>Barème</h4>
+          <table class="table table-bordered">
+            <tbody>
+              <tr>
+                <td><b>Critère</b></td><td><b>Points</b></td>
+              </tr>
+              <tr>
+                <td>Code fonctionnel</td><td>3</td>
+              </tr>
+              <tr>
+                <td>Précision sur le jeu de test >= 81%</td><td>5</td>
+              </tr>
+              <tr>
+                <td>Qualité / lisibilité du code</td><td>2</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td><b>Total</b></td><td><b>10</b></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <hr />
+
+        <!-- QUESTION 4 -->
+        <div id="Q4">
+          <h2 id="question-4">Question 4 (10 points) : Réseau à convolutions avec PyTorch</h2>
+          <p>
+            Pour cette dernière question, vous allez concevoir l'architecture d'un CNN. Pour ce faire, contrairement aux questions précédentes, vous allez utiliser 
+            la bibliothèque <a href="https://pytorch.org/" >PyTorch</a>.
+          </p>
+          <p>PyTorch vous permet de définir un modèle comme une suite de couches à l'aide de la classe <code class="highlighter-rouge">Sequential</code> (<a href="https://pytorch.org/docs/stable/generated/torch.nn.Sequential.html" >documentation</a>). Cette classe prend
+            dans son constructeur les différentes couches du modèle, puis les connecte automatiquement. Ce <a href="https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html">tutoriel</a> pourrait s'avérer utile.
+          </p>
+          <p>
+            Parmi les couches dont vous pourriez avoir besoin (vous pouvez aussi en utiliser d'autres si vous le souhaitez) :
+          </p>
+          <ul>
+            <li><code class="highlighter-rouge">Conv2d</code> (<a href="https://pytorch.org/docs/stable/generated/torch.nn.Conv2d.html" >documentation</a>) : réalise une convolution sur les entrées 2D;</li>
+            <li><code class="highlighter-rouge">MaxPool2d</code> (<a href="https://pytorch.org/docs/stable/generated/torch.nn.MaxPool2d.html" >documentation</a>) : réalise un max-pooling sur les entrées 2D;</li>
+            <li><code class="highlighter-rouge">AvgPool2d</code> (<a href="https://pytorch.org/docs/stable/generated/torch.nn.AvgPool2d.html" >documentation</a>) : réalise un average-pooling sur les entrées 2D;</li>
+            <li><code class="highlighter-rouge">ReLU</code> (<a href="https://pytorch.org/docs/stable/generated/torch.nn.ReLU.html" >documentation</a>) : applique la fonction ReLU sur toutes les entrées;</li>
+            <li><code class="highlighter-rouge">Tanh</code> (<a href="https://pytorch.org/docs/stable/generated/torch.nn.Tanh.html" >documentation</a>) : applique la fonction Tanh sur toutes les entrées;</li>
+            <li><code class="highlighter-rouge">Dropout</code> (<a href="https://pytorch.org/docs/stable/generated/torch.nn.Dropout.html" >documentation</a>) : désactive aléatoirement certains poids pour éviter le sur-apprentissage;</li>
+            <li><code class="highlighter-rouge">Flatten</code> (<a href="https://pytorch.org/docs/stable/generated/torch.nn.Flatten.html" >documentation</a>) : cette couche particulière change les dimensions de son entrée pour transformer une matrice (ou un tenseur) en un vecteur;</li>
+            <li><code class="highlighter-rouge">Linear</code> (<a href="https://pytorch.org/docs/stable/generated/torch.nn.Linear.html" >documentation</a>) : réalise une convolution 2D sur les entrées;</li>
+          </ul>
+          <p>
+              Vous allez devoir commencer votre modèle par une ou plusieurs couches à convolution, puis finir votre modèle par une ou plusieurs couches linéaires. Entre vos couches à convolution et vos couches linéaires, vous devrez mettre la couche <code class="highlighter-rouge">Flatten</code> afin de redimensionner les entrées pour
+               les couches linéaires.
+          </p>
+          <p>
+            Vous ne devez compléter QUE la création du modèle. La boucle d'entrainement a déjà été concue pour vous.
+          </p>
+          <p>Tâches :</p>
+          <ul>
+            <li>Complétez le modèle <code class="highlighter-rouge">self.model = torch_nn.Sequential(...)</code> dans la classe <code class="highlighter-rouge">PyTorchCNNFashionClassificationModel</code>.</li>
+          </ul>
+          <p>Pour recevoir tous les points, votre architecture doit être capable d'atteindre une précision d'au moins 84% sur le jeu de test.</p>
+          <p>Pour tester votre implémentation, utilisez l'auto-correcteur comme suit :</p>
+          <div class="language-shell highlighter-rouge">
+            <div class="highlight">
+              <pre class="highlight"><code>python autograder.py <span class="nt">-q</span> q4</code></pre>
+            </div>
+          </div>
+
+          <h4>Barème</h4>
+          <table class="table table-bordered">
+            <tbody>
+              <tr>
+                <td><b>Critère</b></td><td><b>Points</b></td>
+              </tr>
+              <tr>
+                <td>Code fonctionnel</td><td>3</td>
+              </tr>
+              <tr>
+                <td>Précision sur le jeu de test >= 84%</td><td>5</td>
+              </tr>
+              <tr>
+                <td>Qualité / lisibilité du code</td><td>2</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td><b>Total</b></td><td><b>10</b></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <hr />
+      </div>
+
+</body>
+
+</html>
