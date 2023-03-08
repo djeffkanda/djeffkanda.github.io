@@ -26,13 +26,17 @@ social: true  # includes social icons at the bottom of the page
 [//]: # ()
 [//]: # (Link to your social media connections, too. This theme is set up to use [Font Awesome icons]&#40;http://fortawesome.github.io/Font-Awesome/&#41; and [Academicons]&#40;https://jpswalsh.github.io/academicons/&#41;, like the ones below. Add your Facebook, Twitter, LinkedIn, Google Scholar, or just disable all of them.)
 
-D’Jeff is currently enrolled into a PhD program at the University of Sherbrooke. He is interested in applying Machine 
-learning to solve real-life problems. His current research lies at the intersection of machine  learning and 
-cybersecurity. More specifically, he is  interested in creating  robust machine learning  models for anomaly detection 
-for industrial control systems. 
 
-He is a member of the [GRIC](https://gric.recherche.usherbrooke.ca/equipe/djeff-nkashama-kanda/), an interdisciplinary 
-research group working on cybersecurity. He is also a member of [GREPROVAD](https://www.greprovad.org/docs/djeffkanda/) and [Optimall-Lab](https://www.optimall-lab.org/membres.php).
+D'Jeff is currently pursuing a PhD at the University of Sherbrooke, with a focus on the practical applications of 
+machine learning. His research interests lie at the intersection of machine learning and cybersecurity, where he aims 
+to develop robust models for anomaly detection for industrial control systems.
+
+D'Jeff is an active member of the [GRIC](https://gric.recherche.usherbrooke.ca/equipe/djeff-nkashama-kanda/), an 
+interdisciplinary research group, at the University of Sherbrooke, dedicated to advancing cybersecurity. 
+Additionally, he is a part of [GREPROVAD](https://www.greprovad.org/docs/djeffkanda/) and
+[Optimall-Lab](https://www.optimall-lab.org/membres.php), 
+where he collaborates with experts in the fields of 
+optimization and machine learning.
 
 {% if page.cv_pdf %}<a
 href="{{ page.cv_pdf | prepend: 'assets/pdf/' | relative_url}}" target="_blank"
