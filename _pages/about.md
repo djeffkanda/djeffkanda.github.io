@@ -35,7 +35,7 @@ D'Jeff is an active member of the [GRIC](https://gric.recherche.usherbrooke.ca/e
 interdisciplinary research group, at the University of Sherbrooke, dedicated to advancing cybersecurity. 
 Additionally, he is a part of [GREPROVAD](https://www.greprovad.org/docs/djeffkanda/) and
 [Optimall-Lab](https://www.optimall-lab.org/membres.php), 
-where he collaborates with experts in the fields of 
+where he collaborates with researchers in the fields of 
 optimization and machine learning.
 
 {% if page.cv_pdf %}<a
