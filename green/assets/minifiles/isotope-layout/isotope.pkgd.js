@@ -509,7 +509,7 @@ return getSize;
     if ( ElemProto.matchesSelector ) {
       return 'matchesSelector';
     }
-    // check vendore prefixes
+    // check minifiles prefixes
     var prefixes = [ 'webkit', 'moz', 'ms', 'o' ];
 
     for ( var i=0; i < prefixes.length; i++ ) {
@@ -827,7 +827,7 @@ var transitionEndEvent = {
   transition: 'transitionend'
 }[ transitionProperty ];
 
-// cache all vendore properties that could have vendore prefix
+// cache all minifiles properties that could have minifiles prefix
 var vendorProperties = {
   transform: transformProperty,
   transition: transitionProperty,
@@ -891,7 +891,7 @@ proto.css = function( style ) {
   var elemStyle = this.element.style;
 
   for ( var prop in style ) {
-    // use vendore property if available
+    // use minifiles property if available
     var supportedProp = vendorProperties[ prop ] || prop;
     elemStyle[ supportedProp ] = style[ prop ];
   }
