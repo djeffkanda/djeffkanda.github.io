@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="apple-mobile-web-app-title" content="CS 188">
+    <meta name="application-name" content="CS 188">
+    <meta name="msapplication-TileColor" content="#3b7ea1">
+    <meta name="theme-color" content="#3b7ea1">
+
+    <title>
+        TP5 - IFT615: Introduction à l'intelligence artificielle, Hiver 2024
+    </title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      CommonHTML: {
+        linebreaks: { automatic: true },
+        scale: 90,
+        preferredFont: "Latin Modern"
+      },
+      "HTML-CSS": {
+        linebreaks: { automatic: true },
+        scale: 90,
+        preferredFont: "Latin Modern"
+      },
+     SVG: {
+       linebreaks: { automatic: true },
+       scale: 90,
+       preferredFont: "Latin Modern"
+     }
+    });
+
+    </script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+            async></script>
+
+    <style type="text/css">
+        nav.navbar {
+            background-color: #005a20;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body data-spy="scroll" data-target="#toc">
+<div id="navscroll">
+    <nav id="navbar" class="navbar navbar-light navbar-expand-lg align-items-center">
+        <div class="container">
+            <a class="navbar-brand" href="../../index.html" style="color: #fff;"><strong>IFT615</strong> | Été 2022</a>
+            <button class="navbar-toggler collapsed" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+        </div>
+    </nav>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" type="text/javascript"></script>
+<script src="../../assets/js/parallax.min.js"></script>
+<script src="../../assets/js/main.min.js"></script>
+
+
+<div class='container'>
+    <div class="row">
+        <div class="col-sm-3">
+            <nav id="toc" data-toggle="toc" class="sticky-top" style="top: 40px; margin-bottom: 40px">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a class="nav-link" href="#introduction">Introduction</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="#team">Équipes</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="#multiagents">Bienvenue dans Pacman multi-agents</a>
+                    </li>
+
+                    <li>
+                        <a class="nav-link" href="#Q1">Question 1 (5 points) : Reflex Agent</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="#Q2">Question 2 (6 points) : Minimax</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="#Q3">Question 3 (6 points) : élagage Alpha-Beta</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="#Q4">Question 4 (6 points) : Expectimax</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="#Q5">Question 5 (7 points) : Fonction d'évaluation</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="col-sm-9">
+            <h1 class="mt-1 center" id="project-5-machine-learning">TP 5 : Planification dans les jeux competitifs</h1>
+
+            <!--        <center>Version 2.0. Dernière mise à jour : 09-07-2023.</center>-->
+            <center>Remise : <b>Lundi 15 avril</b> à <b>23:59</b></center>
+            <center>Mode de soumission : Turnin TP5</center>
+            <center>Total de points : 30</center>
+            <center>Pondération : 8%</center>
+            <center><strong>NB: Tout retard vaudra 0.</strong></center>
+            <center>Correcteur : DJeff Kanda Nkashama</center>
+            <center>Email du correcteur : <a href="mailto:maxime.alvarez@usherbrooke.ca">nkad2101@usherbrooke.ca</a>
+            </center>
+            <center><small><em>Source: The Pac-Man Projects, University of California, Berkeley (Traduit et modifié avec
+                permission)</em></small></center>
+            <hr/>
+
+            <img src="../../assets/images/tp5_pacman_multi_agent.png" alt="Pacman, maintenant avec des fantômes."
+                 class="img-fluid center-image" style="width: 500px;"/>
+
+            <h2 id="introduction">Introduction</h2>
+            <p>Dans ce projet, vous allez concevoir des agents pour la version classique de Pacman, incluant les
+                fantômes. Vous implémenterez notamment minimax et expectimax, et vous vous essaierez à la conception de
+                fonction d'évaluation.</p>
+
+            <p>Le code du projet est similaire aux TP que vous avez déjà fait.</p>
+
+            <p>Le code pour ce projet contient les fichiers ci-dessous, disponibles dans un <a
+                    href="../../assets/tp/IFT615_TP5.zip">fichier compressé</a>.</p>
+
+            <table class="table table-bordered">
+                <tbody>
+                <tr>
+                    <td colspan="2"><b>Les fichiers que vous allez éditer :</b></td>
+                </tr>
+                <tr>
+                    <td><code>multiAgents.py</code></td>
+                    <td>Où tout le code de vos agents ira.</td>
+                </tr>
+
+                <tr>
+                    <td colspan="2"><b>Des fichiers que vous pouvez lire mais PAS éditer :</b></td>
+                </tr>
+                <tr>
+                    <td><code>pacman.py</code></td>
+                    <td>Fichier principal qui lance les parties de Pacman. Ce fichier défini également un type Pacman
+                        <code>GameState</code>, que vous utiliserez dans ce projet.
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>game.py</code></td>
+                    <td>Contient la logique du monde de Pacman. Ce fichier défini plusieurs type importants comme <code>AgentState</code>,
+                        <code>Agent</code>, <code>Direction</code> et <code>Grid</code>.
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>util.py</code></td>
+                    <td>Contient des structures de données utiles pour l'implémentation des algorithmes de recherche.
+                        Vous n'avez pas à utiliser ces structures pour ce projet mais vous pourriez trouver d'autres
+                        fonctions implémentées ici utiles.
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"><b>Vous pouvez ignorer les autres fichiers qui servent de support.</b></td>
+                </tr>
+                </tbody>
+            </table>
+            </table>
+
+            <p><strong>Fichiers à modifier et soumettre :</strong> vous devez remplir les sections manquantes du fichier
+                <code>multiAgents.py</code>. Veuillez ne pas modifier les autres fichiers.
+            </p>
+
+            <p><strong>Évaluation :</strong> l'auto-correcteur s'assure du bon fonctionnement de votre code.
+                Ne changez aucun nom de fonction ou nom de classe dans le code, sans quoi l'auto-correcteur ne
+                fonctionnera
+                pas.
+                L'auto-correcteur ne détermine pas entièrement votre résultat final. La qualité de votre implémentation
+                - et
+                non les résultats obtenus par l'auto-correcteur - déterminent votre résultat final.
+            </p>
+
+            <p><strong>Aide :</strong> N'hésitez pas à contacter les assistants à l'enseignement pour ce cours afin de
+                vous
+                aider dans le travail.</p>
+
+            <p><strong>Plagiat : </strong>
+                Nous prendrons soin de vérifier votre code par rapport aux autres soumissions de la classe afin de
+                détecter toute redondance logique.<br/>
+
+                Tout cas de plagiat sera sanctionné adéquatement. Voir le <a
+                        href="https:/www.usherbrooke.ca/ssf/fileadmin/sites/ssf/documents/Antiplagiat/Document-informatif-V2-CU-2012-06-06.pdf">document</a>
+                informatif du Groupe de travail antiplagiat de l'Université de Sherbrooke à cet effet.</p>
+
+            <br/><br/>
+            <p>Vous utiliserez l'autogradeur avec les commandes suivantes pour évaluer vos solutions :</p>
+
+            <div class="language-shell highlighter-rouge">
+                <div class="highlight">
+                    <pre class="highlight"><code id="codeBlock0">python autograder.py</code></pre>
+                    <a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock0"><i
+                            class="fal fa-copy"></i> Copy</a></div>
+            </div>
+
+            <p>Il peut être exécuté pour une question particulière, telle que la q2, par :</p>
+
+            <div class="language-shell highlighter-rouge">
+                <div class="highlight">
+                    <pre class="highlight"><code id="codeBlock1">python autograder.py <span
+                            class="nt">-q</span> q2</code></pre>
+                    <a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock1"><i
+                            class="fal fa-copy"></i> Copy</a></div>
+            </div>
+
+            <p>Il peut être exécuté pour un test particulier par des commandes de la forme :</p>
+
+            <div class="language-shell highlighter-rouge">
+                <div class="highlight">
+                    <pre class="highlight"><code id="codeBlock2">python autograder.py <span class="nt">-t</span> test_cases/q2/0-small-tree</code></pre>
+                    <a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock2"><i
+                            class="fal fa-copy"></i> Copy</a></div>
+            </div>
+
+            <hr>
+
+            <h2 id="multiagents">Bienvenue dans Pacman multi-agents</h2>
+
+            <p>Pour commencer, lancez Pacman en mode de contrôle manuel, qui utilise les touches de direction :</p>
+
+            <div class="language-shell highlighter-rouge">
+                <div class="highlight">
+                    <pre class="highlight"><code id="codeBlock3">python pacman.py</code></pre>
+                    <a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock3"><i
+                            class="fal fa-copy"></i> Copy</a></div>
+            </div>
+
+            <p>Maintenant, lancez la classe <code>ReflexAgent</code> fourni dans <code>multiAgents.py</code>.</p>
+            <div class="language-shell highlighter-rouge">
+                <div class="highlight">
+                    <pre class="highlight"><code id="codeBlock4">python pacman.py <span class="nt">-p</span> ReflexAgent</code></pre>
+                    <a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock4"><i
+                            class="fal fa-copy"></i> Copy</a></div>
+            </div>
+
+            <p>Notez qu'il joue plutot mal même sur des niveaux simples :</p>
+            <div class="language-shell highlighter-rouge">
+                <div class="highlight">
+                    <pre class="highlight"><code id="codeBlock5">python pacman.py <span class="nt">-p</span> ReflexAgent <span
+                            class="nt">-l</span> testClassic</code></pre>
+                    <a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock5"><i
+                            class="fal fa-copy"></i> Copy</a></div>
+            </div>
+
+            <p>Inspectez son code (dans <code>multiAgents.py</code>) et assurez-vous de comprendre ce qu'il fait.</p>
+            <hr>
+
+            <h2 id="Q1">Question 1 : Reflex Agent</h2>
+            <p>
+                Améliorez le <code>ReflexAgent</code> dans <code>multiAgents.py</code> afin qu'il joue correctement.
+                Le code donné pour l'agent à réflexes fourni des exemples utiles de méthodes qui interrogent le <code>GameState</code>
+                pour des informations. Un bon agent à réflexes devra considérer les positions de la nourriture et des
+                fantômes pour obtenir de
+                bonnes performances. Votre agent devrait facilement et regulièrement réussir le niveau
+                <code>testClassic</code> :
+            </p>
+            <div class="language-shell highlighter-rouge">
+                <div class="highlight">
+                    <pre class="highlight"><code id="codeBlock6">python pacman.py <span class="nt">-p</span> ReflexAgent <span
+                            class="nt">-l</span> testClassic</code></pre>
+                    <a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock6"><i
+                            class="fal fa-copy"></i> Copy</a></div>
+            </div>
+
+            <p>Essayez votre agent sur le niveau par défaut <code>mediumClassic</code> avec un ou deux fantômes (et
+                l'animation desactivée pour accélérer l'affichage) :</p>
+            <div class="language-shell highlighter-rouge">
+                <div class="highlight">
+                    <pre class="highlight"><code id="codeBlock7">python pacman.py <span class="nt">--frameTime</span> 0 <span
+                            class="nt">-p</span> ReflexAgent <span class="nt">-k</span> 1</code></pre>
+                    <a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock7"><i
+                            class="fal fa-copy"></i> Copy</a></div>
+            </div>
+            <div class="language-shell highlighter-rouge">
+                <div class="highlight">
+                    <pre class="highlight"><code id="codeBlock8">python pacman.py <span class="nt">--frameTime</span> 0 <span
+                            class="nt">-p</span> ReflexAgent <span class="nt">-k</span> 2</code></pre>
+                    <a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock8"><i
+                            class="fal fa-copy"></i> Copy</a></div>
+            </div>
+
+            <p>Comment s'en sort votre agent ? Il mourra probablement avec 2 fantômes sur le niveau par défaut, à moins
+                que votre function d'évaluation ne soit vraiment bonne.</p>
+            <p><i>Note</i> : Rappelez-vous que <code>newFood</code> a la methode <code>asList()</code>.</p>
+            <p><i>Note</i> : Comme <i>features</i>, essayez l'inverse de valeurs importantes (comme la distance à la
+                nourriture) plutôt que les valeurs en elles-meme.</p>
+            <p><i>Note</i> : La fonction d'évaluation que vous écrivez évalue des paires état-action; ce ne sera pas
+                toujours le cas.</p>
+            <p><i>Note</i> : Vous pourriez trouver utile, pour debugger, de voir le contenu des objets. Pour cela vous
+                pouvez afficher la représentation en chaîne de caractères de l'objet.
+                Par exemple, <code>print(newGhostStates)</code>.</p>
+            <p><i>Options</i> : Les fantômes par défaut sont aléatoires; vous pouvez vous amuser à les rendre plus
+                intelligents avec des fantômes directionnels en utilisant <code>-g DirectionalGhost</code>.
+                Si l'aléatoire vous empêche de voir si votre agent s'améliore, vous pouvez utiliser <code>-f</code> pour
+                utiliser une <i>seed</i> fixe (rendant les choix aléatoires identiques d'une partie à l'autre).
+                Vous pouvez jouer plusieurs parties à la suite avec <code>-n</code>. Désactivez les graphismes avec
+                <code>--no-graphic</code> pour jouer de nombreuses parties rapidement.</p>
+
+            <p><i>Notation</i> : Votre agent sera évalué sur le niveau <code>openClassic</code> 10 fois. Vous pouvez
+                essayer votre agent sous ces conditions avec :</p>
+            <div class="language-shell highlighter-rouge">
+                <div class="highlight">
+                    <pre class="highlight"><code id="codeBlock9">python autograder.py <span
+                            class="nt">--q</span> q1</code></pre>
+                    <a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock9"><i
+                            class="fal fa-copy"></i> Copy</a></div>
+            </div>
+
+            <p><b>Ne passez pas trop de temps sur cette question, le principal du TP se situe dans les autres
+                questions.</b></p>
+
+            <h4>Barème</h4>
+            <table class="table table-bordered">
+                <tbody>
+                <tr>
+                    <td><b>Critère</b></td>
+                    <td><b>Points</b></td>
+                </tr>
+                <tr>
+                    <td>Au moins 5 victoires</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>10 victoires</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>Moyenne du score > 500</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>Moyenne du score > 1000</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>Qualité / lisibilité du code</td>
+                    <td>1</td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td><b>Total</b></td>
+                    <td><b>5</b></td>
+                </tr>
+                </tfoot>
+            </table>
+
+            <hr>
+
+            <h2 id="Q2">Question 2 : Minimax</h2>
+            <p>
+                Maintenant vous allez concevoir un agent de recherche compétitif dans la classe
+                <code>MinimaxAgent</code> dans <code>multiAgents.py</code>.
+                Votre agent Minimax doit fonctionner avec un nombre quelconque de fantômes, donc vous devez écrire un
+                algorithme qui soit un peu plus générique que
+                celui vu en cours. En particulier, votre arbre minimax aura plusieurs couches min (une pour chaque
+                fantôme) pour chaque couche max.
+            </p>
+
+            <p>
+                Votre code doit aussi explorer l'arbre à une profondeur arbitraire. Vous évaluerez les feuilles de votre
+                arbre minimax en utilisant la fonction <code>self.evaluationFunction</code>,
+                qui par défaut appelle <code>scoreévaluationFunction</code>. <code>MinimaxAgent</code> hérite de <code>MultiAgentSearchAgent</code>,
+                qui donne accès à
+                <self>self.depth</self>
+                et <code>self.evaluationFunction</code>.
+                Assurez-vous que votre code fasse référence à ces deux variables lorsque nécessaire, car ces variables
+                contiendront les valeurs passées par les options de ligne de commande.
+            </p>
+            <p>
+                Cela correspond au point 2) de la slide 16 de "ift615-17-Planification dans les jeux compétitifs".
+            </p>
+
+            <p>
+                <i>Important</i> : un niveau de profondeur de recherche correspond à un mouvement de Pacman ET les
+                mouvements des fantômes. Donc une recherche de profondeur 2 implique un mouvement de Pacman puis de tous
+                les fantômes, deux fois.
+            </p>
+
+            <p>
+                <i>Notation</i> : Pour évaluer votre code l'autocorrecteur vérifiera que vous explorez le bon nombre
+                d'états. C'est la seule manière fiable de détecter des erreurs subtiles dans des implémentations de
+                minimax.
+                De ce fait, l'autocorrecteur sera très strict sur le nombre de fois que vous appelez <code>GameState.generateSuccessor</code>.
+                Si vous l'appelez plus ou moins de fois que nécessaire, l'autocorrecteur le signalera.
+                Pour tester votre code, utilisez :
+            </p>
+            <div class="language-shell highlighter-rouge">
+                <div class="highlight">
+                    <pre class="highlight"><code id="codeBlock10">python autograder.py <span
+                            class="nt">--q</span> q2</code></pre>
+                    <a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock10"><i
+                            class="fal fa-copy"></i> Copy</a></div>
+            </div>
+
+            <p>
+                Cela montrera comment votre code marche sur un nombre de petits arbres ainsi qu'une partie de Pacman.
+                Pour l'éxecuter sans affichage :
+            </p>
+            <div class="language-shell highlighter-rouge">
+                <div class="highlight">
+                    <pre class="highlight"><code id="codeBlock11">python autograder.py <span
+                            class="nt">--q</span> q2 <span class="nt">--no-graphics</span></code></pre>
+                    <a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock11"><i
+                            class="fal fa-copy"></i> Copy</a></div>
+            </div>
+
+
+            <h4>Indices et observations</h4>
+            <ul>
+                <li>Indice : implémentez votre algorithme recursivement.</li>
+                <li>Une implémentation correcte de minimax fera perdre Pacman dans certaines parties. Ce n'est pas un
+                    problème étant donné que c'est attendu, les tests seront validés.
+                </li>
+                <li>
+                    La fonction d'évaluation pour la partie de Pacman pour cette question est déjà écrite (<code>self.evaluationFunction</code>).
+                    Vous ne devriez pas changer cette fonction mais remarquez que maintenant nous évaluons des
+                    <i>états</i> plutot que des actions contrairement à l'agent à réflexes.
+                    Les agents <i>look-ahead</i> évaluent les états futurs alors que les agents à réflexes évaluent les
+                    actions depuis l'état actuel.
+                </li>
+                <li>
+                    Les valeurs minimax depuis l'état initial dans le niveau <code>minimaxClassic</code> sont 9, 8, 7 et
+                    -492 pour les profondeurs de recherche 1, 2, 3 et 4 respectivement. Notez que votre agent minimax
+                    gagnera souvent (665/1000 dans notre cas) malgrès la prédiction pessimiste de minimax avec une
+                    profondeur de recherche de 4.
+                    <div class="language-shell highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"><code id="codeBlock12">python pacman.py <span class="nt">-p</span> MinimaxAgent <span
+                                    class="nt">-l</span> minimaxClassic <span class="nt">-a</span> depth=4</code></pre>
+                            <a type="btn" class="badge badge-light btn-copy-code"
+                               data-clipboard-target="#codeBlock12"><i class="fal fa-copy"></i> Copy</a></div>
+                    </div>
+                </li>
+                <li>
+                    Pacman est toujours l'agent 0, et les agents bougent dans l'ordre croissant des indices (donc Pacman
+                    bouge toujours en premier).
+                </li>
+                <li>
+                    Tous les états dans minimax sont des <code>GameStates</code>, soit donnés à <code>getAction</code>
+                    soit générés par <code>GameState.generateSuccessor</code>. Dans ce projet, vous ne simplifierez pas
+                    les états.
+                </li>
+                <li>
+                    Sur des niveaux plus grands comme <code>openClassic</code> et <code>mediumClassic</code>, vous
+                    remarquerez que Pacman est bon à ne pas mourir mais n'arrive pas à gagner. Il se deplacera sans
+                    vraiment faire de progrès.
+                    Il peut même se déplacer autour d'un point de nourriture sans le manger simplement parce qu'il ne
+                    sait pas ou il irait après. Ne vous inquiétez pas si remarquez ce comportement, la question 5
+                    résoudra ces problèmes.
+                </li>
+                <li>
+                    Quand Pacman pense sa mort inévitable, il essaiera souvent de finir la partie le plus vite possible
+                    à cause de la pénalité constante (à chaque tour le score de Pacman reçoit -1). Parfois, c'est la
+                    mauvaise chose à faire avec des fantômes aléatoires,
+                    mais minimax suppose toujours le pire :
+                    <div class="language-shell highlighter-rouge">
+                        <div class="highlight">
+                            <pre class="highlight"><code id="codeBlock13">python pacman.py <span class="nt">-p</span> MinimaxAgent <span
+                                    class="nt">-l</span> trappedClassic <span class="nt">-a</span> depth=3</code></pre>
+                            <a type="btn" class="badge badge-light btn-copy-code"
+                               data-clipboard-target="#codeBlock13"><i class="fal fa-copy"></i> Copy</a></div>
+                    </div>
+                    Assurez vous de comprendre pourquoi Pacman se rue sur le fantôme le plus près dans ce cas.
+                </li>
+            </ul>
+
+            <h4>Barème</h4>
+            <table class="table table-bordered">
+                <tbody>
+                <tr>
+                    <td><b>Critère</b></td>
+                    <td><b>Points</b></td>
+                </tr>
+                <tr>
+                    <td>Réussite de tous les tests</td>
+                    <td>5</td>
+                </tr>
+                <tr>
+                    <td>Qualité / lisibilité du code</td>
+                    <td>1</td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td><b>Total</b></td>
+                    <td><b>6</b></td>
+                </tr>
+                </tfoot>
+            </table>
+
+
+            <hr>
+
+            <h2 id="Q3">Question 3 : Élagage Alpha-Beta</h2>
+
+            <p>
+                Faites un nouvel agent qui utilise l'élagage alpha-beta pour explorer l'arbre minimax plus efficacement,
+                dans <code>AlphaBetaAgent</code>.
+                Ici encore, votre algorithme doit être plus général que le pseudocode vu en cours, donc une partie de la
+                difficultée est d'étendre l'élagage alpha-beta à plusieurs
+                agents min.
+            </p>
+            <p>
+                Vous devriez noter un gain de temps (peut être qu'alpha-beta avec profondeur 3 ira aussi vite que
+                minimax avec profondeur 2). Idéalement, avec une profondeur 3 sur le niveau
+                <code>smallClassic</code>, votre algorithme devrait prendre quelques secondes ou moins par coup.
+            </p>
+            <div class="language-shell highlighter-rouge">
+                <div class="highlight">
+                    <pre class="highlight"><code id="codeBlock14">python pacman.py <span class="nt">-p</span> AlphaBetaAgent <span
+                            class="nt">-l</span> smallClassic <span class="nt">-a</span> depth=3</code></pre>
+                    <a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock14"><i
+                            class="fal fa-copy"></i> Copy</a></div>
+            </div>
+
+            <p>
+                Les valeurs minimax pour l'agent <code>AlphaBetaAgent</code> doivent être les mêmes que pour l'agent
+                <code>MinimaxAgent</code>, cependant les actions choisies peuvent varier dû une stratégie différente en
+                cas d'égalité (des valeurs). Les valeurs minimax
+                pour le niveau <code>minimaxClassic</code> sont de 9, 8, 7 et -492 pour les profondeurs 1, 2, 3 et 4
+                respectivement.
+            </p>
+
+            <p>
+                <i>Notation</i> : Parce que l'autocorrecteur vérifie votre code pour déterminer si vous explorez le bon
+                nombre d'états, il est important que vous ne changiez pas l'ordre des enfants dans l'arbre.
+                En d'autres termes, les états successeurs doivent être traités dans l'ordre dans lequel ils sont
+                retournés par <code>GameState.getLegalActions</code>. Enfin, n'appelez pas <code>GameState.generateSuccessor</code>
+                plus que nécessaire.
+            </p>
+
+            <p>
+                <b>Vous ne devez pas couper les branches en cas d'égalité pour correspondre aux états explorés par
+                    l'autocorrecteur.</b>
+            </p>
+
+            <p>
+                Le pseudocode ci-dessous représente l'algorithme que vous devez implémenter pour cette question.
+            </p>
+
+            <img src="../../assets/images/tp5_alphabeta_pseudocode.png" alt="" class="img-fluid center-image"
+                 style="width: 500px;"/>
+
+            <p>Pour tester votre code, utilisez :</p>
+            <div class="language-shell highlighter-rouge">
+                <div class="highlight">
+                    <pre class="highlight"><code id="codeBlock15">python autograder.py <span
+                            class="nt">-q</span> q3</code></pre>
+                    <a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock15"><i
+                            class="fal fa-copy"></i> Copy</a></div>
+            </div>
+
+            <p>
+                Une implémentation correcte de l'élagage alpha-beta n'empêchera pas Pacman de perdre dans certains des
+                tests. Ce n'est pas un problème puisqu'il s'agit du comportement attendu.
+            </p>
+
+            <h4>Barème</h4>
+            <table class="table table-bordered">
+                <tbody>
+                <tr>
+                    <td><b>Critère</b></td>
+                    <td><b>Points</b></td>
+                </tr>
+                <tr>
+                    <td>Code fonctionnel</td>
+                    <td>5</td>
+                </tr>
+                <tr>
+                    <td>Qualité / lisibilité du code</td>
+                    <td>1</td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td><b>Total</b></td>
+                    <td><b>6</b></td>
+                </tr>
+                </tfoot>
+            </table>
+
+            <hr>
+
+            <h2 id="Q4">Question 4 : Expectimax</h2>
+            <p>
+                Minimax et alpha-beta sont très bons, mais les deux supposent que vous jouez contre un adversaire qui
+                fait des choix optimaux. Comme toute personne qui a déjà joué au tic-tac-toe vous le dira,
+                ce n'est pas toujours le cas. Dans cette question, vous implémenterez <code>ExpectimaxAgent</code>, qui
+                est utile pour modéliser des comportements probabilistes d'agents qui font des choix suboptimaux.
+            </p>
+
+            <p>
+                Comme pour les algorithmes de recherche ou de satisfaction de contraintes, la beauté de ces algorithmes
+                est leur applicabilité générale. Pour accélérer le développement, vous avez accès à des tests basés sur
+                des arbres quelconques. Vous pouvez tester votre implémentation sur des tests et une partie de Pacman
+                avec :
+            </p>
+
+            <div class="language-shell highlighter-rouge">
+                <div class="highlight">
+                    <pre class="highlight"><code id="codeBlock16">python autograder.py <span
+                            class="nt">-q</span> q4</code></pre>
+                    <a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock16"><i
+                            class="fal fa-copy"></i> Copy</a></div>
+            </div>
+
+            <p>
+                Une fois que votre algorithme marche sur des petits arbres, vous pouvez observer ses performances dans
+                Pacman.
+                Des fantômes aléatoire ne sont pas des agents minimax optimaux, ainsi les modéliser avec une recherche
+                minimax n'est pas forcement appropriée. <code>ExpectimaxAgent</code> ne prendra plus le minimum sur
+                toutes les
+                actions des fantômes mais l'espérance, en fonction du modèle de fonctionnement des fantômes que votre
+                agent a. Pour simplifier votre code, supposez que vous n'affronterez que des adversaires qui choisissent
+                leur action au hasard (uniformément)
+                parmi leurs actions possibles (<code>getLegalActions</code>).
+            </p>
+            <p>
+                Pour voir comment <code>ExpectimaxAgent</code> agit dans Pacman, lancez :
+            </p>
+            <div class="language-shell highlighter-rouge">
+                <div class="highlight">
+                    <pre class="highlight"><code id="codeBlock17">python pacman.py <span class="nt">-p</span> ExpectimaxAgent <span
+                            class="nt">-l</span> minimaxClassic <span class="nt">-a</span> depth=3</code></pre>
+                    <a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock17"><i
+                            class="fal fa-copy"></i> Copy</a></div>
+            </div>
+
+            <p>
+                Vous devriez observer une approche plus cavalière à proximité des fantômes. En particulier, si Pacman
+                perçoit qu'il est potentiellement coincé mais qu'il peut s'échapper pour attraper de la nourriture, il
+                essaiera.
+                Étudiez les résultats dans les scénarios suivants :
+            </p>
+            <div class="language-shell highlighter-rouge">
+                <div class="highlight">
+                    <pre class="highlight"><code id="codeBlock18">python pacman.py <span class="nt">-p</span> AlphaBetaAgent <span
+                            class="nt">-l</span> trappedClassic <span class="nt">-a</span> depth=3 -q -n 10</code></pre>
+                    <a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock18"><i
+                            class="fal fa-copy"></i> Copy</a></div>
+            </div>
+            <div class="language-shell highlighter-rouge">
+                <div class="highlight">
+                    <pre class="highlight"><code id="codeBlock19">python pacman.py <span class="nt">-p</span> ExpectimaxAgent <span
+                            class="nt">-l</span> trappedClassic <span class="nt">-a</span> depth=3 -q -n 10</code></pre>
+                    <a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock19"><i
+                            class="fal fa-copy"></i> Copy</a></div>
+            </div>
+            <p>
+                Vous devriez voir que <code>ExpectimaxAgent</code> gagne environ la moitié du temps, tandis que <code>AlphaBetaAgent</code>
+                perd constamment.
+            </p>
+            <p>
+                Une implémentation correcte d'expectimax n'empêchera pas Pacman de perdre dans certains des tests. Ce
+                n'est pas un problème puisqu'il s'agit du comportement attendu.
+            </p>
+
+            <h4>Barème</h4>
+            <table class="table table-bordered">
+                <tbody>
+                <tr>
+                    <td><b>Critère</b></td>
+                    <td><b>Points</b></td>
+                </tr>
+                <tr>
+                    <td>Code fonctionnel</td>
+                    <td>5</td>
+                </tr>
+                <tr>
+                    <td>Qualité / lisibilité du code</td>
+                    <td>1</td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td><b>Total</b></td>
+                    <td><b>6</b></td>
+                </tr>
+                </tfoot>
+            </table>
+            <hr>
+
+            <h2 id="Q5">Question 5 : Fonction d'évaluation</h2>
+
+            <p>
+                Écrivez une meilleure fonction d'évaluation pour Pacman dans <code>betterEvaluationFunction</code>.
+                La fonction d'évaluation doit évaluer des états, et non des actions comme la fonction d'évaluation de
+                l'agent à réflexes.
+                Avec une profondeur de recherche de 2, votre fonction d'évaluation devrait reussir le niveau <code>smallClassic</code>
+                avec un fantôme aléatoire plus de la moitié du temps.
+                Votre code doit tourner à une vitesse raisonnable. Pour avoir 100% des points, Pacman doit avoir en
+                moyenne 1000 points lorsqu'il gagne.
+            </p>
+            <p>
+                <b>
+                    Vous devez mettre une courte (une ou deux phrases suffisent) explication / description de ce que
+                    votre fonction d'évaluation fait et des choix que vous avez fait.
+                </b>
+
+            </p>
+
+            <p>
+                <i>Notation</i> : l'autocorrecteur testera votre agent sur le niveau <code>smallClassic</code> 10 fois.
+            </p>
+
+            <h4>Barème</h4>
+            <table class="table table-bordered">
+                <tbody>
+                <tr>
+                    <td><b>Critère</b></td>
+                    <td><b>Points</b></td>
+                </tr>
+                <tr>
+                    <td>Pas d'explications</td>
+                    <td>0 POUR TOUTE LA QUESTION</td>
+                </tr>
+                <tr>
+                    <td>Au moins une victoire sans timeout</td>
+                    <td>+1</td>
+                </tr>
+                <tr>
+                    <td>Au moins 5 victoires</td>
+                    <td>+1</td>
+                </tr>
+                <tr>
+                    <td>10 victoires</td>
+                    <td>+1</td>
+                </tr>
+                <tr>
+                    <td>Score moyen d'au moins 500 points</td>
+                    <td>+1</td>
+                </tr>
+                <tr>
+                    <td>Score moyen d'au moins 1000 points</td>
+                    <td>+1</td>
+                </tr>
+                <tr>
+                    <td>Si les parties prennent moins de 30s en moyenne ET au moins 5 victoires</td>
+                    <td>+1</td>
+                </tr>
+                <tr>
+                    <td>Qualité / lisibilité du code</td>
+                    <td>1</td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td><b>Total</b></td>
+                    <td><b>7</b></td>
+                </tr>
+                </tfoot>
+            </table>
+
+            <p>
+                Vous pouvez tester votre agent avec :
+            </p>
+            <div class="language-shell highlighter-rouge">
+                <div class="highlight">
+                    <pre class="highlight"><code id="codeBlock20">python autograder.py <span
+                            class="nt">-q</span> q5</code></pre>
+                    <a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock20"><i
+                            class="fal fa-copy"></i> Copy</a></div>
+            </div>
+
+            <p>
+                Votre code sera testé avec les graphismes desactivés :
+            </p>
+            <div class="language-shell highlighter-rouge">
+                <div class="highlight">
+                    <pre class="highlight"><code id="codeBlock21">python autograder.py <span
+                            class="nt">-q</span> q5 <span class="nt">--no-graphics</span></code></pre>
+                    <a type="btn" class="badge badge-light btn-copy-code" data-clipboard-target="#codeBlock21"><i
+                            class="fal fa-copy"></i> Copy</a></div>
+            </div>
+
+            <hr>
+        </div>
+    </div>
+
+    <hr>
+    <div id="team">
+        <h2 id="">Les équipes:</h2>
+        <table  class="dataframe table table-bordered">
+            <thead>
+            <tr style="text-align: right;">
+                <th>Membre 1</th>
+                <th>Membre 2</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Rouabah, Lokman</td>
+                <td>Boutin, Karl</td>
+            </tr>
+            <tr>
+                <td>Tétreault, Etienne</td>
+                <td>Charbonneau, Victor</td>
+            </tr>
+            <tr>
+                <td>Boulanger, Bastien</td>
+                <td>Dia, Adam</td>
+            </tr>
+            <tr>
+                <td>Ménard Tétreault, Yuhan</td>
+                <td>Lessard, Nathan</td>
+            </tr>
+            <tr>
+                <td>Girard Hivon, Maxime</td>
+                <td>Bergeron, Marc-Olivier</td>
+            </tr>
+            <tr>
+                <td>Yahya, Mohamed</td>
+                <td>Philion, Guillaume</td>
+            </tr>
+            <tr>
+                <td>Crozet, Thomas</td>
+                <td>Mailhot, Christophe</td>
+            </tr>
+            <tr>
+                <td>Krid, Ahmed Bahaedine</td>
+                <td>Desfossés, Alexandre</td>
+            </tr>
+            <tr>
+                <td>Lavallée, Louis</td>
+                <td>Pion, Raphaël</td>
+            </tr>
+            <tr>
+                <td>Carignan, Benjamin</td>
+                <td>Duchesneau, Paul</td>
+            </tr>
+            <tr>
+                <td>Bellavance, Nicolas</td>
+                <td>Grenier, Philippe-Olivier</td>
+            </tr>
+            <tr>
+                <td>Bourgeois, Thomas</td>
+                <td>Gendreau, Tommy</td>
+            </tr>
+            <tr>
+                <td>~</td>
+                <td>Allard, Cloé</td>
+            </tr>
+            <tr>
+                <td>Proulx, Hugo</td>
+                <td>Pépin, Pierre-Luc</td>
+            </tr>
+            <tr>
+                <td>Tientcheu Tchako, David Jeeson</td>
+                <td>Gauthier, Carl</td>
+            </tr>
+            <tr>
+                <td>Lamothe-Morin, Zoé</td>
+                <td>Giasson, Frédéric</td>
+            </tr>
+            <tr>
+                <td>Breton Corona, Eduardo Yvan</td>
+                <td>Turcotte, Raphaël</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+</body>
+
+</html>
